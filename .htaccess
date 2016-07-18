@@ -1,0 +1,7 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+Options +FollowSymlinks
+RewriteBase /
+RewriteRule ^([a-z0-9_\-]+)/?$ index.php?metodo=$1 [NC,L] 
+RewriteRule ^([a-z0-9_\-]+)/([a-z0-9_\-]+)/?$ index.php?metodo=$1&parametro=$2 [NC,L]
+</IfModule>
