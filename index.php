@@ -1,27 +1,31 @@
 <?php 
-    //Recupera os valores da URL
-    $metodo = "";
-    if(isset($_GET["metodo"])){
-        $metodo = $_GET["metodo"];
-    }
-    
-    $parametro = "";
-    if(isset($_GET["parametro"])){
-        $parametro = $_GET["parametro"]; 
-    }
-    
-    $resposta = array();
+	//Inclui arquivos com as funções da API.
+	include('mensagem.php');
 
-    //Verifica qual metodo foi chamado
-    switch($metodo){
-        case "autenticacao":
-            $resposta = autenticacao();
-            break;
-        default:
-            echo "mensagens";
-            $resposta = mensagens(1);
-            break;
-    }
+    //Recupera os valores da URL
+	$metodo = $_SERVER['REQUEST_METHOD'];
+	//$funcao = $_SERVER['PATH_INFO'];
+	//echo $funcao;
+
+	$resposta = array();
+	
+	//Verifica se o método utilizado na request é POST
+	if($metodo == "POST"){	
+		//Verifica qual metodo foi chamado
+		switch($funcao){
+			case "autenticacao":
+				$resposta = autenticacao();
+				break;
+			default:
+				echo "mensagens";
+				$resposta = mensagens(1);
+				break;
+		}
+	}
+	else
+	{
+		$resposta = mensagens(1);
+	}
     
     //Retorna a resposta
     resposta($resposta);
@@ -77,46 +81,4 @@
         header('Content-Type: application/json');
         echo json_encode($conteudo);
     }
-    
-    function mensagens($codigo){
-        $mensagens = array(
-                        array(
-                            "Codigo"=>1
-                            ,"Mensagem"=>"Caminho especificado nao encontrado"
-                        )
-                        ,array(
-                            "Codigo"=>2
-                            ,"Mensagem"=>"Nenhum dado recebido"
-                        )
-                        ,array(
-                            "Codigo"=>3
-                            ,"Mensagem"=>"Estrutura de dados diferente do esperado"
-                        )
-                        ,array(
-                            "Codigo"=>4
-                            ,"Mensagem"=>"Usuario autenticado com sucesso"
-                        )
-                        ,array(
-                            "Codigo"=>5
-                            ,"Mensagem"=>"Usuario ou senha incorretos"
-                        )
-                     );
-
-        $retorno = array();
-        //Busca pelo erro com o codigo informado de parâmetro
-        foreach($mensagens as $item){
-            if($item["Codigo"] == $codigo){
-                $retorno = $item;
-                break;
-            }
-        }
-        return $retorno;
-    }
-    /*$Usuario = array("idUsuario"=>"1", "Email"=>"felipe_d_o@hotmail.com", "Nome"=>"Felipe", "Telefone"=>"39076099");
-    $teste = array();
-    array_push($teste,$Usuario);
-    array_push($teste,$Usuario);
-    array_push($teste,$Usuario);*/
-    //echo json_encode($teste);
-    //echo $metodo;
 ?>

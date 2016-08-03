@@ -15,6 +15,6 @@ if(isset($PortaBD)){
 if (!$conect) die ('<div id="erro2">Falha na coneco com o Banco de Dados!</div>');
 
 // Caso a conexão seja aprovada, então conecta o Banco de Dados.	
-$db = mysqli_select_db($conect,"spypet");
+$db = mysqli_select_db($conect,"appet");
 
 ?>
