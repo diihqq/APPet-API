@@ -1,11 +1,13 @@
 <?php 
 	//Inclui arquivos com as funções da API.
 	include('mensagem.php');
-	echo "aooo";
+	
     //Recupera os valores da URL
 	$metodo = $_SERVER['REQUEST_METHOD'];
-	//$funcao = $_SERVER['PATH_INFO'];
-	//echo $funcao;
+	$caminho = $_SERVER['PATH_INFO'];
+	$array = explode("/",$caminho);
+	$funcao = $array[1];
+	$id = $array[2];
 
 	$resposta = array();
 	
