@@ -1,27 +1,30 @@
 <?php 
 	//Inclui arquivos com as funções da API.
 	include('mensagem.php');
+	include('usuario.php');
 	
     //Recupera os valores da URL
 	$metodo = $_SERVER['REQUEST_METHOD'];
 	$caminho = $_SERVER['PATH_INFO'];
 	$array = explode("/",$caminho);
 	$funcao = $array[1];
-	$id = $array[2];
+	$id = 0;
+	if(isset($array[2])){
+		$id = $array[2];
+	}
 
 	$resposta = array();
-	
+
 	//Verifica se o método utilizado na request é POST
 	if($metodo == "POST"){	
-		//Verifica qual metodo foi chamado
-		switch($funcao){
-			case "autenticacao":
-				$resposta = autenticacao();
-				break;
-			default:
-				echo "mensagens";
-				$resposta = mensagens(1);
-				break;
+		//Verifica se a função informada existe.
+		if(function_exists($funcao)){
+			//Chama função.
+			$resposta = $funcao($id);
+		}
+		else{
+			//Caso a função nao exista retorna erro.
+			$resposta = mensagens(1);
 		}
 	}
 	else
@@ -30,57 +33,6 @@
 	}
     
     //Retorna a resposta
-    resposta($resposta);
-        
-    /*============================================FUNÇÕES DA API===================================================*/
-    
-    //Autentica usuário na aplicação
-    function autenticacao(){
-        $conteudo = file_get_contents('php://input');
-        $resposta = array();
-        
-        //Verifica se os dados foram recebidos
-        if(empty($conteudo)){
-            $resposta = mensagens(2);
-        }
-        else{
-            $credenciais = json_decode(file_get_contents('php://input'),true);
-            
-            //Verifica se as infromações esperadas foram recebidas
-            if(!isset($credenciais["usuario"]) || !isset($credenciais["senha"])){
-                $resposta = mensagens(3);
-            }
-            else{
-                include("conectar.php");
-
-                $autenticado = false;
-                
-                //Evita SQL injection
-                $email = mysqli_real_escape_string($conect,$credenciais["usuario"]);
-                $senha = mysqli_real_escape_string($conect,$credenciais["senha"]);
-
-                //Consulta usuário no banco
-                $query = mysqli_query($conect,"SELECT Email FROM usuario WHERE email='" .$email ."' AND senha='" .$senha ."'") or die(mysqli_error($conect));
-                //faz um looping e cria um array com os campos da consulta
-                while($dados = mysqli_fetch_array($query))
-                {
-                  $autenticado = true;
-                }
-                
-                if($autenticado){
-                    $resposta = mensagens(4);
-                }else{
-                    $resposta = mensagens(5);
-                }
-            }
-        }
-        
-        return $resposta;
-    }
-    
-    //Função para retornar a resposta ao cliente
-    function resposta($conteudo){
-        header('Content-Type: application/json');
-        echo json_encode($conteudo);
-    }
+	header('Content-Type: application/json');
+    echo json_encode($resposta);
 ?>

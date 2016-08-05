@@ -21,6 +21,14 @@ function mensagens($codigo){
 						"Codigo"=>5
 						,"Mensagem"=>"Usuario ou senha incorretos"
 					)
+					,array(
+						"Codigo"=>6
+						,"Mensagem"=>"Email já cadastrado!"
+					)
+					,array(
+						"Codigo"=>7
+						,"Mensagem"=>"Usuário cadastrado com sucesso!"
+					)
 				 );
 
 	$retorno = array();
