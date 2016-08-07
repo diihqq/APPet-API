@@ -1,9 +1,8 @@
 <?php
 
 $ServerBD = $_SERVER['SERVER_NAME'];
-$PortaBD = $_SERVER ['SERVER_PORT'];
 
-if(isset($PortaBD)){
+if(!isset($PortaBD)){
     $conexao = mysqli_connect($ServerBD, "root", "ALUNOS");
 }else{
     $conexao = mysqli_connect($ServerBD .":" .$PortaBD, "root", "ALUNOS");   
