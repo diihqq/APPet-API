@@ -2,7 +2,7 @@
 	//Inclui arquivos com as funções da API.
 	include('mensagem.php');
 	include('usuario.php');
-	
+
     //Recupera os valores da URL
 	$metodo = $_SERVER['REQUEST_METHOD'];
 	$caminho = $_SERVER['PATH_INFO'];

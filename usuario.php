@@ -4,13 +4,13 @@ function ListaUsuarios($id){
 	
 	$resposta = array();
 
-	$id = mysqli_real_escape_string($conect,$id);
+	$id = mysqli_real_escape_string($conexao,$id);
 	
 	//Consulta usuário no banco
 	if($id == 0){
-		$query = mysqli_query($conect,"SELECT * FROM usuario") or die(mysqli_error($conect));
+		$query = mysqli_query($conexao,"SELECT * FROM usuario") or die(mysqli_error($conexao));
 	}else{
-		$query = mysqli_query($conect,"SELECT * FROM usuario WHERE idUsuario = " .$id) or die(mysqli_error($conect));
+		$query = mysqli_query($conexao,"SELECT * FROM usuario WHERE idUsuario = " .$id) or die(mysqli_error($conexao));
 	}
 	//faz um looping e cria um array com os campos da consulta
 	while($dados = mysqli_fetch_array($query))
@@ -28,7 +28,8 @@ function ListaUsuarios($id){
 
 function InsereUsuario($id){
 	
-	$conteudo = file_get_contents('php://input');
+	//Recupera conteudo recebido na request
+	$conteudo = file_get_contents("php://input");
 	$resposta = array();
 
 	//Verifica se o conteudo foi recebido
@@ -36,10 +37,11 @@ function InsereUsuario($id){
 		$resposta = mensagens(2);
 	}
 	else{
+		//Converte o json recebido pra array
 		$dados = json_decode($conteudo,true);
 		
 		//Verifica se as infromações esperadas foram recebidas
-		if(!isset($dados["idUsuario"]) || !isset($dados["Nome"]) || !isset($dados["Email"]) || 
+		if(!isset($dados["Nome"]) || !isset($dados["Email"]) || 
 		   !isset($dados["Telefone"]) || !isset($dados["Cidade"]) || !isset($dados["Bairro"])){
 			$resposta = mensagens(3);
 		}
@@ -48,15 +50,14 @@ function InsereUsuario($id){
 			$emailCadastrado = false;
 			
 			//Evita SQL injection
-			$idUsuario = mysqli_real_escape_string($conect,$dados["idUsuario"]);
-			$Nome = mysqli_real_escape_string($conect,$dados["Nome"]);
-			$Email = mysqli_real_escape_string($conect,$dados["Email"]);
-			$Telefone = mysqli_real_escape_string($conect,$dados["Telefone"]);
-			$Cidade = mysqli_real_escape_string($conect,$dados["Cidade"]);
-			$Bairro = mysqli_real_escape_string($conect,$dados["Bairro"]);
+			$Nome = mysqli_real_escape_string($conexao,$dados["Nome"]);
+			$Email = mysqli_real_escape_string($conexao,$dados["Email"]);
+			$Telefone = mysqli_real_escape_string($conexao,$dados["Telefone"]);
+			$Cidade = mysqli_real_escape_string($conexao,$dados["Cidade"]);
+			$Bairro = mysqli_real_escape_string($conexao,$dados["Bairro"]);
 			
 			//Consulta usuário no banco
-			$query = mysqli_query($conect,"SELECT * FROM usuario WHERE email='" .$Email ."'") or die(mysqli_error($conect));
+			$query = mysqli_query($conexao,"SELECT * FROM usuario WHERE email='" .$Email ."'") or die(mysqli_error($conexao));
 			
 			//Verifica se foi retornado algum registro
 			while($dados = mysqli_fetch_array($query))
@@ -68,56 +69,142 @@ function InsereUsuario($id){
 			if($emailCadastrado){
 				$resposta = mensagens(6);
 			}else{
+				//Recupera o próximo ID de usuário
+				$idUsuario = 1;
+				$query = mysqli_query($conexao, "SELECT idUsuario FROM usuario ORDER BY idUsuario DESC LIMIT 1") or die(mysqli_error($conexao));
+				while($dados = mysqli_fetch_array($query)){
+					$idUsuario = $dados["idUsuario"];
+				}
+				$idUsuario++;
+				
 				//Insere usuário
-				$query = mysqli_query($conect,"INSERT INTO usuario VALUES(" .$idUsuario ."," .$Nome ."," .$Email ."," .$Telefone ."," .$Cidade ."," .$Bairro .")") or die(mysqli_error($conect));
+				$query = mysqli_query($conexao,"INSERT INTO usuario VALUES(" .$idUsuario .",'" .$Nome ."','" .$Email ."','" .$Telefone ."','" .$Cidade ."','" .$Bairro ."')") or die(mysqli_error($conexao));
 				$resposta = mensagens(7);
 			}
 		}
 	}
 
 	return $resposta;
-	
 }
 
-/*
-$retorno = array();
+function RecuperaUsuario($id){
 	
-	
-	
-	
-	//Verifica se os dados foram recebidos
+	//Recupera conteudo recebido na request
+	$conteudo = file_get_contents("php://input");
+	$resposta = array();
+
+	//Verifica se o conteudo foi recebido
 	if(empty($conteudo)){
 		$resposta = mensagens(2);
 	}
 	else{
-		$credenciais = json_decode(file_get_contents('php://input'),true);
+		//Converte o json recebido pra array
+		$dados = json_decode($conteudo,true);
 		
 		//Verifica se as infromações esperadas foram recebidas
-		if(!isset($credenciais["usuario"]) || !isset($credenciais["senha"])){
+		if(!isset($dados["Email"])){
 			$resposta = mensagens(3);
 		}
 		else{
 			include("conectar.php");
-			$autenticado = false;
+			$emailCadastrado = false;
 			
 			//Evita SQL injection
-			$email = mysqli_real_escape_string($conect,$credenciais["usuario"]);
-			$senha = mysqli_real_escape_string($conect,$credenciais["senha"]);
+			$Email = mysqli_real_escape_string($conexao,$dados["Email"]);
+			
 			//Consulta usuário no banco
-			$query = mysqli_query($conect,"SELECT Email FROM usuario WHERE email='" .$email ."' AND senha='" .$senha ."'") or die(mysqli_error($conect));
-			//faz um looping e cria um array com os campos da consulta
+			$query = mysqli_query($conexao,"SELECT * FROM usuario WHERE email='" .$Email ."'") or die(mysqli_error($conexao));
+			
+			//Verifica se foi retornado algum registro
 			while($dados = mysqli_fetch_array($query))
 			{
-			  $autenticado = true;
+				$resposta = array('idUsuario' => $dados['idUsuario'],
+					'Nome' => $dados['Nome'],
+					'Email' => $dados['Email'],
+					'Telefone' => $dados['Telefone'],
+					'Cidade' => $dados['Cidade'],
+					'Bairro' => $dados['Bairro']);		
+			  $emailCadastrado = true;
+			  break;
 			}
 			
-			if($autenticado){
-				$resposta = mensagens(4);
-			}else{
-				$resposta = mensagens(5);
+			//Verifica se o usuário foi encontrado
+			if(!$emailCadastrado){
+				$resposta = mensagens(8);
 			}
 		}
 	}
-*/
-?>
 
+	return $resposta;
+}
+
+function AtualizaUsuario($id){
+	
+	//Recupera conteudo recebido na request
+	$conteudo = file_get_contents("php://input");
+	$resposta = array();
+
+	//Verifica se o id foi recebido
+	if($id == 0){
+		$resposta = mensagens(9);
+	}
+	else{
+		//Verifica se o conteudo foi recebido
+		if(empty($conteudo)){
+			$resposta = mensagens(2);
+		}
+		else{
+			//Converte o json recebido pra array
+			$dados = json_decode($conteudo,true);
+			
+			//Verifica se as infromações esperadas foram recebidas
+			if(!isset($dados["Nome"]) || !isset($dados["Email"]) || 
+			   !isset($dados["Telefone"]) || !isset($dados["Cidade"]) || !isset($dados["Bairro"])){
+				$resposta = mensagens(3);
+			}
+			else{
+				include("conectar.php");
+				
+				//Evita SQL injection
+				$id = mysqli_real_escape_string($conexao,$id);
+				$Nome = mysqli_real_escape_string($conexao,$dados["Nome"]);
+				$Email = mysqli_real_escape_string($conexao,$dados["Email"]);
+				$Telefone = mysqli_real_escape_string($conexao,$dados["Telefone"]);
+				$Cidade = mysqli_real_escape_string($conexao,$dados["Cidade"]);
+				$Bairro = mysqli_real_escape_string($conexao,$dados["Bairro"]);
+				
+				//Consulta usuário no banco
+				$query = mysqli_query($conexao, "UPDATE usuario SET Nome = '" .$Nome ."', Email = '" .$Email ."', Telefone = '" .$Telefone ."', Cidade = '" .$Cidade ."', Bairro = '" .$Bairro ."' WHERE idUsuario=" .$id) or die(mysqli_error($conexao));
+				$resposta = mensagens(10);
+			}
+		}
+	}
+
+	return $resposta;
+
+}
+
+function ExcluiUsuario($id){
+	
+	//Recupera conteudo recebido na request
+	$resposta = array();
+
+	//Verifica se o id foi recebido
+	if($id == 0){
+		$resposta = mensagens(9);
+	}
+	else{
+		include("conectar.php");
+		
+		//Evita SQL injection		
+		$id = mysqli_real_escape_string($conexao,$id);
+		
+		//Consulta usuário no banco
+		$query = mysqli_query($conexao, "DELETE FROM usuario WHERE idUsuario=" .$id) or die(mysqli_error($conexao));
+		$resposta = mensagens(11);
+	}
+
+	return $resposta;
+
+}
+?>

@@ -23,11 +23,27 @@ function mensagens($codigo){
 					)
 					,array(
 						"Codigo"=>6
-						,"Mensagem"=>"Email já cadastrado!"
+						,"Mensagem"=>"Email ja cadastrado!"
 					)
 					,array(
 						"Codigo"=>7
-						,"Mensagem"=>"Usuário cadastrado com sucesso!"
+						,"Mensagem"=>"Cadastrado com sucesso!"
+					)
+					,array(
+						"Codigo"=>8
+						,"Mensagem"=>"Registro nao encontrado!"
+					)
+					,array(
+						"Codigo"=>9
+						,"Mensagem"=>"Codigo invalido!"
+					)
+					,array(
+						"Codigo"=>10
+						,"Mensagem"=>"Atualizado com sucesso!"
+					)
+					,array(
+						"Codigo"=>11
+						,"Mensagem"=>"Excluido com sucesso!"
 					)
 				 );
 
