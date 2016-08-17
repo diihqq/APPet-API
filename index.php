@@ -3,6 +3,7 @@
 	include('mensagem.php');
 	include('usuario.php');
 	include('raca.php');
+	include('especie.php');
 
     //Recupera os valores da URL
 	$metodo = $_SERVER['REQUEST_METHOD'];
