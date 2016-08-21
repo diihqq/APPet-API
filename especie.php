@@ -8,15 +8,15 @@ function ListaEspecies($id){
 	
 	//Consulta espécie no banco
 	if($id == 0){
-		$query = mysqli_query($conexao,"SELECT * FROM Especie") or die(mysqli_error($conexao));
+		$query = mysqli_query($conexao,"SELECT idEspecie, Nome FROM Especie") or die(mysqli_error($conexao));
 	}else{
-		$query = mysqli_query($conexao,"SELECT * FROM Especie WHERE idEspecie = " .$id) or die(mysqli_error($conexao));
+		$query = mysqli_query($conexao,"SELECT idEspecie, Nome FROM Especie WHERE idEspecie = " .$id) or die(mysqli_error($conexao));
 	}
 	//faz um looping e cria um array com os campos da consulta
 	while($dados = mysqli_fetch_array($query))
 	{
 		$resposta[] = array('idEspecie' => $dados['idEspecie'],
-							'Nome' => $dados['Nome']);
+							'Nome' => utf8_encode($dados['Nome']));
 	}
 	
 	return $resposta;

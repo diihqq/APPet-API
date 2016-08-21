@@ -8,19 +8,19 @@ function ListaUsuarios($id){
 	
 	//Consulta usuário no banco
 	if($id == 0){
-		$query = mysqli_query($conexao,"SELECT * FROM Usuario") or die(mysqli_error($conexao));
+		$query = mysqli_query($conexao,"SELECT idUsuario, Nome, Email, Telefone, Cidade, Bairro FROM Usuario") or die(mysqli_error($conexao));
 	}else{
-		$query = mysqli_query($conexao,"SELECT * FROM Usuario WHERE idUsuario = " .$id) or die(mysqli_error($conexao));
+		$query = mysqli_query($conexao,"SELECT idUsuario, Nome, Email, Telefone, Cidade, Bairro FROM Usuario WHERE idUsuario = " .$id) or die(mysqli_error($conexao));
 	}
 	//faz um looping e cria um array com os campos da consulta
 	while($dados = mysqli_fetch_array($query))
 	{
 		$resposta[] = array('idUsuario' => $dados['idUsuario'],
-							'Nome' => $dados['Nome'],
-							'Email' => $dados['Email'],
+							'Nome' => utf8_encode($dados['Nome']),
+							'Email' => utf8_encode($dados['Email']),
 							'Telefone' => $dados['Telefone'],
-							'Cidade' => $dados['Cidade'],
-							'Bairro' => $dados['Bairro']);
+							'Cidade' => utf8_encode($dados['Cidade']),
+							'Bairro' => utf8_encode($dados['Bairro']));
 	}
 	
 	return $resposta;
@@ -57,7 +57,7 @@ function InsereUsuario($id){
 			$Bairro = mysqli_real_escape_string($conexao,$dados["Bairro"]);
 			
 			//Consulta usuário no banco
-			$query = mysqli_query($conexao,"SELECT * FROM Usuario WHERE Email='" .$Email ."'") or die(mysqli_error($conexao));
+			$query = mysqli_query($conexao,"SELECT idUsuario, Nome, Email, Telefone, Cidade, Bairro FROM Usuario WHERE Email='" .$Email ."'") or die(mysqli_error($conexao));
 			
 			//Verifica se foi retornado algum registro
 			while($dados = mysqli_fetch_array($query))
@@ -113,17 +113,17 @@ function RecuperaUsuario($id){
 			$Email = mysqli_real_escape_string($conexao,$dados["Email"]);
 			
 			//Consulta usuário no banco
-			$query = mysqli_query($conexao,"SELECT * FROM Usuario WHERE Email='" .$Email ."'") or die(mysqli_error($conexao));
+			$query = mysqli_query($conexao,"SELECT idUsuario, Nome, Email, Telefone, Cidade, Bairro FROM Usuario WHERE Email='" .$Email ."'") or die(mysqli_error($conexao));
 			
 			//Verifica se foi retornado algum registro
 			while($dados = mysqli_fetch_array($query))
 			{
 				$resposta = array('idUsuario' => $dados['idUsuario'],
-					'Nome' => $dados['Nome'],
-					'Email' => $dados['Email'],
+					'Nome' => utf8_encode($dados['Nome']),
+					'Email' => utf8_encode($dados['Email']),
 					'Telefone' => $dados['Telefone'],
-					'Cidade' => $dados['Cidade'],
-					'Bairro' => $dados['Bairro']);		
+					'Cidade' => utf8_encode($dados['Cidade']),
+					'Bairro' => utf8_encode($dados['Bairro']));		
 			  $emailCadastrado = true;
 			  break;
 			}
