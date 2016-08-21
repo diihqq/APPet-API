@@ -4,6 +4,7 @@
 	include('usuario.php');
 	include('raca.php');
 	include('especie.php');
+	include('dispositivo.php');
 
     //Recupera os valores da URL
 	$metodo = $_SERVER['REQUEST_METHOD'];

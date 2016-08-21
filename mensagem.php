@@ -45,6 +45,14 @@ function mensagens($codigo){
 						"Codigo"=>11
 						,"Mensagem"=>"Excluido com sucesso!"
 					)
+					,array(
+						"Codigo"=>12
+						,"Mensagem"=>"Dispositivo ja cadastrado!"
+					)
+					,array(
+						"Codigo"=>13
+						,"Mensagem"=>"Dispositivo é principal!"
+					)
 				 );
 
 	$retorno = array();
