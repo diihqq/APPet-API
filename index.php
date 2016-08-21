@@ -5,6 +5,7 @@
 	include('raca.php');
 	include('especie.php');
 	include('dispositivo.php');
+	include('estabelecimentoFavorito.php');
 
     //Recupera os valores da URL
 	$metodo = $_SERVER['REQUEST_METHOD'];
