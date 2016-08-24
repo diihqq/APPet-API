@@ -6,6 +6,8 @@
 	include('especie.php');
 	include('dispositivo.php');
 	include('estabelecimentoFavorito.php');
+	include('foto.php');
+	include('notificacao.php');
 
     //Recupera os valores da URL
 	$metodo = $_SERVER['REQUEST_METHOD'];
