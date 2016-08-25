@@ -5,6 +5,7 @@
 	include('raca.php');
 	include('especie.php');
 	include('dispositivo.php');
+	include('animal.php');
 	include('estabelecimentoFavorito.php');
 	include('foto.php');
 	include('notificacao.php');
