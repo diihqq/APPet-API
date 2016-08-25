@@ -17,7 +17,7 @@ function ListaAnimais($id){
 	{
 		$resposta[] = array('idAnimal' => $dados['idAnimal'],
 							'Nome' => $dados['Nome'],
-							'Genero' => $dados['Genero'],
+							'Genero' => utf8_decode($dados['Genero']),
 							'Cor' => $dados['Cor'],
 							'Porte' => utf8_decode($dados['Porte']),
 							'Idade' => $dados['Idade'],
@@ -27,7 +27,37 @@ function ListaAnimais($id){
 							'idUsuario' => $dados['idUsuario'],
 							'idRaca' => $dados['idRaca']);
 	}
+	return $resposta;
+}
+
+function ListaAnimaisDesaparecidos($id){
+	include("conectar.php");
 	
+	$resposta = array();
+
+	$id = mysqli_real_escape_string($conexao,$id);
+	
+	//Consulta animal no banco
+	if($id == 0){
+		$query = mysqli_query($conexao,"SELECT * FROM Animal WHERE Desaparecido = 1") or die(mysqli_error($conexao));
+	}else{
+		$query = mysqli_query($conexao,"SELECT * FROM Animal WHERE idAnimal = " .$id . " and Desaparecido = 1") or die(mysqli_error($conexao));
+	}
+	//faz um looping e cria um array com os campos da consulta
+	while($dados = mysqli_fetch_array($query))
+	{
+		$resposta[] = array('idAnimal' => $dados['idAnimal'],
+							'Nome' => replaceAccents($dados['Nome']),
+							'Genero' => utf8_decode($dados['Genero']),
+							'Cor' => $dados['Cor'],
+							'Porte' => utf8_decode($dados['Porte']),
+							'Idade' => $dados['Idade'],
+							'Caracteristicas' => utf8_decode($dados['Caracteristicas']),
+							'QRCode' => $dados['QRCode'],
+							'Desaparecido' => $dados['Desaparecido'],
+							'idUsuario' => $dados['idUsuario'],
+							'idRaca' => $dados['idRaca']);
+	}
 	return $resposta;
 }
 
@@ -126,9 +156,9 @@ function RecuperaAnimal($id){
 					'Nome' => $dados['Nome'],
 					'Genero' => $dados['Genero'],
 					'Cor' => $dados['Cor'],
-					'Porte' => utf8_decode($dados['Porte']),
+					'Porte' => replaceAccents($dados['Porte']),
 					'Idade' => $dados['Idade'],
-					'Caracteristicas' => utf8_decode($dados['Caracteristicas']),
+					'Caracteristicas' => replaceAccents($dados['Caracteristicas']),
 					'QRCode' => $dados['QRCode'],
 					'Desaparecido' => $dados['Desaparecido'],
 					'idUsuario' => $dados['idUsuario'],
@@ -144,7 +174,7 @@ function RecuperaAnimal($id){
 			}
 		}
 	}
-
+	
 	return $resposta;
 }
 
@@ -226,6 +256,13 @@ function ExcluiAnimal($id){
 	}
 
 	return $resposta;
-
 }
+
+function replaceAccents($str) 
+{
+  $search =    explode(",","ç,æ,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,ø,Ø,Å,Á,À,Â,Ä,È,É,Ê,Ë,Í,Î,Ï,Ì,Ò,Ó,Ô,Ö,Ú,Ù,Û,Ü,Ÿ,Ç,Æ,Œ");
+  $replace = explode(",","c,ae,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,o,O,A,A,A,A,A,E,E,E,E,I,I,I,I,O,O,O,O,U,U,U,U,Y,C,AE,OE");
+  return str_replace($search, $replace, $str);
+}
+
 ?>
