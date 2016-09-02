@@ -8,9 +8,9 @@ function ListaAnimais($id){
 	
 	//Consulta animal no banco
 	if($id == 0){
-		$query = mysqli_query($conexao,"SELECT * FROM Animal") or die(mysqli_error($conexao));
+		$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome , A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Desaparecido, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca") or die(mysqli_error($conexao));
 	}else{
-		$query = mysqli_query($conexao,"SELECT * FROM Animal WHERE idAnimal = " .$id) or die(mysqli_error($conexao));
+		$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome , A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Desaparecido, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca WHERE idAnimal = " .$id) or die(mysqli_error($conexao));
 	}
 	//faz um looping e cria um array com os campos da consulta
 	while($dados = mysqli_fetch_array($query))
@@ -22,10 +22,16 @@ function ListaAnimais($id){
 							'Porte' => utf8_encode($dados['Porte']),
 							'Idade' => $dados['Idade'],
 							'Caracteristicas' => utf8_encode($dados['Caracteristicas']),
-							'QRCode' => $dados['QRCode'],
+							'QRCode' => utf8_encode($dados['QRCode']),
 							'Desaparecido' => $dados['Desaparecido'],
 							'idUsuario' => $dados['idUsuario'],
-							'idRaca' => $dados['idRaca']);
+							'idRaca' => $dados['idRaca'],
+							'NomeRaca' => utf8_encode($dados['NomeRaca']),
+							'NomeUsuario' => utf8_encode($dados['NomeUsuario']),
+							'Email' => utf8_encode($dados['Email']),
+							'Telefone' => $dados['Telefone'],
+							'Cidade' => utf8_encode($dados['Cidade']),
+							'Bairro' => utf8_encode($dados['Bairro']));
 	}
 	return $resposta;
 }
@@ -39,9 +45,9 @@ function ListaAnimaisDesaparecidos($id){
 	
 	//Consulta animal no banco
 	if($id == 0){
-		$query = mysqli_query($conexao,"SELECT * FROM Animal WHERE Desaparecido = 1") or die(mysqli_error($conexao));
+		$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome , A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Desaparecido, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca WHERE A.Desaparecido = 1") or die(mysqli_error($conexao));
 	}else{
-		$query = mysqli_query($conexao,"SELECT * FROM Animal WHERE idAnimal = " .$id . " and Desaparecido = 1") or die(mysqli_error($conexao));
+		$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome , A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Desaparecido, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca WHERE A.idAnimal = " .$id . " and A.Desaparecido = 1") or die(mysqli_error($conexao));
 	}
 	//faz um looping e cria um array com os campos da consulta
 	while($dados = mysqli_fetch_array($query))
@@ -53,10 +59,16 @@ function ListaAnimaisDesaparecidos($id){
 							'Porte' => utf8_encode($dados['Porte']),
 							'Idade' => $dados['Idade'],
 							'Caracteristicas' => utf8_encode($dados['Caracteristicas']),
-							'QRCode' => $dados['QRCode'],
+							'QRCode' => utf8_encode($dados['QRCode']),
 							'Desaparecido' => $dados['Desaparecido'],
 							'idUsuario' => $dados['idUsuario'],
-							'idRaca' => $dados['idRaca']);
+							'idRaca' => $dados['idRaca'],
+							'NomeRaca' => utf8_encode($dados['NomeRaca']),
+							'NomeUsuario' => utf8_encode($dados['NomeUsuario']),
+							'Email' => utf8_encode($dados['Email']),
+							'Telefone' => $dados['Telefone'],
+							'Cidade' => utf8_encode($dados['Cidade']),
+							'Bairro' => utf8_encode($dados['Bairro']));
 	}
 	return $resposta;
 }
@@ -146,23 +158,29 @@ function RecuperaAnimal($id){
 			$idUsuario = mysqli_real_escape_string($conexao,$dados["idUsuario"]);
 			
 			//Consulta animal + dono no banco
-			$query = mysqli_query($conexao,"SELECT * FROM Animal WHERE Nome='" .$Nome ."' and idUsuario=" .$idUsuario ."") or die(mysqli_error($conexao));
+			$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome, A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Desaparecido, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca WHERE A.Nome='" .$Nome ."' and A.idUsuario=" .$idUsuario ."") or die(mysqli_error($conexao));
 			
 			
 			//Verifica se foi retornado algum registro
 			while($dados = mysqli_fetch_array($query))
 			{
-				$resposta = array('idAnimal' => $dados['idAnimal'],
-					'Nome' => utf8_encode($dados['Nome']),
-					'Genero' => utf8_encode($dados['Genero']),
-					'Cor' => utf8_encode($dados['Cor']),
-					'Porte' => utf8_encode($dados['Porte']),
-					'Idade' => $dados['Idade'],
-					'Caracteristicas' => utf8_encode($dados['Caracteristicas']),
-					'QRCode' => $dados['QRCode'],
-					'Desaparecido' => $dados['Desaparecido'],
-					'idUsuario' => $dados['idUsuario'],
-					'idRaca' => $dados['idRaca']);
+				$resposta[] = array('idAnimal' => $dados['idAnimal'],
+							'Nome' => utf8_encode($dados['Nome']),
+							'Genero' => utf8_encode($dados['Genero']),
+							'Cor' => utf8_encode($dados['Cor']),
+							'Porte' => utf8_encode($dados['Porte']),
+							'Idade' => $dados['Idade'],
+							'Caracteristicas' => utf8_encode($dados['Caracteristicas']),
+							'QRCode' => utf8_encode($dados['QRCode']),
+							'Desaparecido' => $dados['Desaparecido'],
+							'idUsuario' => $dados['idUsuario'],
+							'idRaca' => $dados['idRaca'],
+							'NomeRaca' => utf8_encode($dados['NomeRaca']),
+							'NomeUsuario' => utf8_encode($dados['NomeUsuario']),
+							'Email' => utf8_encode($dados['Email']),
+							'Telefone' => $dados['Telefone'],
+							'Cidade' => utf8_encode($dados['Cidade']),
+							'Bairro' => utf8_encode($dados['Bairro']));
 							
 			  $animalCadastrado = true;
 			  break;

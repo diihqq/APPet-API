@@ -9,6 +9,7 @@
 	include('estabelecimentoFavorito.php');
 	include('foto.php');
 	include('notificacao.php');
+	include('desaparecimento.php');
 
     //Recupera os valores da URL
 	$metodo = $_SERVER['REQUEST_METHOD'];
