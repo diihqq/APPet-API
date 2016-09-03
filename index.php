@@ -10,6 +10,7 @@
 	include('foto.php');
 	include('notificacao.php');
 	include('desaparecimento.php');
+	include('localizacao.php');
 
     //Recupera os valores da URL
 	$metodo = $_SERVER['REQUEST_METHOD'];
