@@ -11,6 +11,7 @@
 	include('notificacao.php');
 	include('desaparecimento.php');
 	include('localizacao.php');
+	include('alerta.php');
 
     //Recupera os valores da URL
 	$metodo = $_SERVER['REQUEST_METHOD'];
