@@ -8,17 +8,27 @@ function ListaDesaparecimentosPorAnimal($id){
 	
 	//Consulta desaparecimentos no banco
 	if($id == 0){
-		$resposta = mensagens(9);
+		$resposta = mensagens(14);
 	}else{
-		$query = mysqli_query($conexao,"SELECT idDesaparecimento, dataDesaparecimento FROM Desaparecimento WHERE idAnimal = " .$id) or die(mysqli_error($conexao));
-	}
-	//faz um looping e cria um array com os campos da consulta
-	while($dados = mysqli_fetch_array($query))
-	{
-		$resposta[] = array('idDesaparecimento' => $dados['idDesaparecimento'],
-							'dataDesaparecimento' => $dados['dataDesaparecimento']);
-	}
+		$query = mysqli_query($conexao,"SELECT D.idDesaparecimento, D.dataDesaparecimento, A.Nome, A.Genero, A.Cor , A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Desaparecido, A.idUsuario, A.idRaca FROM Desaparecimento as D INNER JOIN Animal as A on D.idAnimal = A.idAnimal WHERE D.idAnimal = " .$id) or die(mysqli_error($conexao));
 	
+		//faz um looping e cria um array com os campos da consulta
+		while($dados = mysqli_fetch_array($query))
+		{
+			$resposta[] = array('idDesaparecimento' => $dados['idDesaparecimento'],
+								'dataDesaparecimento' => $dados['dataDesaparecimento'],
+								'Nome' => utf8_encode($dados['Nome']),
+								'Genero' => utf8_encode($dados['Genero']),
+								'Cor' => utf8_encode($dados['Cor']),
+								'Porte' => utf8_encode($dados['Porte']),
+								'Idade' => $dados['Idade'],
+								'Caracteristicas' => utf8_encode($dados['Caracteristicas']),
+								'QRCode' => utf8_encode($dados['QRCode']),
+								'Desaparecido' => $dados['Desaparecido'],
+								'idUsuario' => $dados['idUsuario'],
+								'idRaca' => $dados['idRaca']);
+		}
+	}
 	return $resposta;
 }
 

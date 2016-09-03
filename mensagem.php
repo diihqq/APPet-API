@@ -53,6 +53,10 @@ function mensagens($codigo){
 						"Codigo"=>13
 						,"Mensagem"=>"Dispositivo é principal!"
 					)
+					,array(
+						"Codigo"=>14
+						,"Mensagem"=>"Um ID deve ser passado como parâmetro!"
+					)
 				 );
 
 	$retorno = array();

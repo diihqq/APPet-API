@@ -1,5 +1,5 @@
 <?php
-function ListaDispositivosPorUsuario($id){
+function ListaDispositivos($id){
 	include("conectar.php");
 	
 	$resposta = array();
@@ -8,9 +8,9 @@ function ListaDispositivosPorUsuario($id){
 	
 	//Consulta dispositivo no banco
 	if($id == 0){
-		$resposta = mensagens(9);
+		$query = mysqli_query($conexao,"SELECT D.idDispositivo, D.ChaveAPI, D.IMEI, D.Principal, U.Nome, U.Email, U.Telefone, U.Cidade, U.Bairro FROM Dispositivo as D INNER JOIN Usuario as U on D.idUsuario = U.idUsuario") or die(mysqli_error($conexao));
 	}else{
-		$query = mysqli_query($conexao,"SELECT idDispositivo, ChaveAPI, IMEI, Principal FROM Dispositivo WHERE idUsuario = " .$id) or die(mysqli_error($conexao));
+		$query = mysqli_query($conexao,"SELECT D.idDispositivo, D.ChaveAPI, D.IMEI, D.Principal, U.Nome, U.Email, U.Telefone, U.Cidade, U.Bairro FROM Dispositivo as D INNER JOIN Usuario as U on D.idUsuario = U.idUsuario WHERE D.idUsuario = " .$id) or die(mysqli_error($conexao));
 	}
 	
 	//faz um looping e cria um array com os campos da consulta
@@ -19,13 +19,18 @@ function ListaDispositivosPorUsuario($id){
 		$resposta[] = array('idDispositivo' => $dados['idDispositivo'],
 							'ChaveAPI' => utf8_encode($dados['ChaveAPI']),
 							'IMEI' => utf8_encode($dados['IMEI']),
-							'Principal' => $dados['Principal']);
+							'Principal' => $dados['Principal'],
+							'Nome' => utf8_encode($dados['Nome']),
+							'Email' => utf8_encode($dados['Email']),
+							'Telefone' => $dados['Telefone'],
+							'Cidade' => utf8_encode($dados['Cidade']),
+							'Bairro' => utf8_encode($dados['Bairro']));
 	}
 	
 	return $resposta;
 }
 
-function InsereDispositivo($id){
+function InsereDispositivo(){
 	
 	//Recupera conteudo recebido na request
 	$conteudo = file_get_contents("php://input");

@@ -73,7 +73,7 @@ function ListaAnimaisDesaparecidos($id){
 	return $resposta;
 }
 
-function InsereAnimal($id){
+function InsereAnimal(){
 	
 	//Recupera conteudo recebido na request
 	$conteudo = file_get_contents("php://input");

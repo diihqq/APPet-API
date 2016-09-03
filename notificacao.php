@@ -8,17 +8,22 @@ function ListaNotificacoesPorUsuario($id){
 	
 	//Consulta foto no banco
 	if($id == 0){
-		$resposta = mensagens(9);
+		$resposta = mensagens(14);
 	}else{
-		$query = mysqli_query($conexao,"SELECT idNotificacao, Mensagem FROM Notificacao WHERE idUsuario = " .$id) or die(mysqli_error($conexao));
-	}
-	//faz um looping e cria um array com os campos da consulta
-	while($dados = mysqli_fetch_array($query))
-	{
-		$resposta[] = array('idNotificacao' => $dados['idNotificacao'],
-							'Mensagem' => utf8_encode($dados['Mensagem']));
-	}
+		$query = mysqli_query($conexao,"SELECT N.idNotificacao, N.Mensagem, U.Nome, U.Email, U.Telefone, U.Cidade, U.Bairro FROM Notificacao as N INNER JOIN Usuario as U on N.idUsuario = U.idUsuario WHERE U.idUsuario = " .$id) or die(mysqli_error($conexao));
 	
+		//faz um looping e cria um array com os campos da consulta
+		while($dados = mysqli_fetch_array($query))
+		{
+			$resposta[] = array('idNotificacao' => $dados['idNotificacao'],
+								'Mensagem' => utf8_encode($dados['Mensagem']),
+								'Nome' => utf8_encode($dados['Nome']),
+								'Email' => utf8_encode($dados['Email']),
+								'Telefone' => $dados['Telefone'],
+								'Cidade' => utf8_encode($dados['Cidade']),
+								'Bairro' => utf8_encode($dados['Bairro']));
+		}
+	}
 	return $resposta;
 }
 

@@ -26,7 +26,7 @@ function ListaUsuarios($id){
 	return $resposta;
 }
 
-function InsereUsuario($id){
+function InsereUsuario(){
 	
 	//Recupera conteudo recebido na request
 	$conteudo = file_get_contents("php://input");
@@ -87,7 +87,7 @@ function InsereUsuario($id){
 	return $resposta;
 }
 
-function RecuperaUsuario($id){
+function RecuperaUsuario(){
 	
 	//Recupera conteudo recebido na request
 	$conteudo = file_get_contents("php://input");

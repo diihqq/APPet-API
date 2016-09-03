@@ -8,20 +8,24 @@ function ListaEstFavoritosPorUsuario($id){
 	
 	//Consulta de Estabelecimentos Favoritos no banco
 	if($id == 0){
-		$resposta = mensagens(9);
+		$resposta = mensagens(14);
 	}else{
-		$query = mysqli_query($conexao,"SELECT idEstabelecimentoFavorito, Nome, Latitude, Longitude FROM EstabelecimentoFavorito WHERE idUsuario = " .$id) or die(mysqli_error($conexao));
-	}
+		$query = mysqli_query($conexao,"SELECT F.idEstabelecimentoFavorito, F.Nome as 'NomeEstFavorito', F.Latitude, F.Longitude, F.idUsuario, U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro FROM EstabelecimentoFavorito as F INNER JOIN Usuario as U on F.idUsuario = U.idUsuario WHERE F.idUsuario = " .$id) or die(mysqli_error($conexao));
 	
-	//faz um looping e cria um array com os campos da consulta
-	while($dados = mysqli_fetch_array($query))
-	{
-		$resposta[] = array('idEstabelecimentoFavorito' => $dados['idEstabelecimentoFavorito'],
-							'Nome' => utf8_encode($dados['Nome']),
-							'Latitude' => $dados['Latitude'],
-							'Longitude' => $dados['Longitude']);
+		//faz um looping e cria um array com os campos da consulta
+		while($dados = mysqli_fetch_array($query))
+		{
+			$resposta[] = array('idEstabelecimentoFavorito' => $dados['idEstabelecimentoFavorito'],
+								'NomeEstFavorito' => utf8_encode($dados['NomeEstFavorito']),
+								'Latitude' => $dados['Latitude'],
+								'idUsuario' => $dados['idUsuario'],
+								'NomeUsuario' => utf8_encode($dados['NomeUsuario']),
+								'Email' => utf8_encode($dados['Email']),
+								'Telefone' => $dados['Telefone'],
+								'Cidade' => utf8_encode($dados['Cidade']),
+								'Bairro' => utf8_encode($dados['Bairro']));
+		}
 	}
-	
 	return $resposta;
 }
 
