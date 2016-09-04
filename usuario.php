@@ -50,11 +50,11 @@ function InsereUsuario(){
 			$emailCadastrado = false;
 			
 			//Evita SQL injection
-			$Nome = mysqli_real_escape_string($conexao,$dados["Nome"]);
-			$Email = mysqli_real_escape_string($conexao,$dados["Email"]);
+			$Nome = utf8_decode(mysqli_real_escape_string($conexao,$dados["Nome"]));
+			$Email = utf8_decode(mysqli_real_escape_string($conexao,$dados["Email"]));
 			$Telefone = mysqli_real_escape_string($conexao,$dados["Telefone"]);
-			$Cidade = mysqli_real_escape_string($conexao,$dados["Cidade"]);
-			$Bairro = mysqli_real_escape_string($conexao,$dados["Bairro"]);
+			$Cidade = utf8_decode(mysqli_real_escape_string($conexao,$dados["Cidade"]));
+			$Bairro = utf8_decode(mysqli_real_escape_string($conexao,$dados["Bairro"]));
 			
 			//Consulta usuário no banco
 			$query = mysqli_query($conexao,"SELECT idUsuario, Nome, Email, Telefone, Cidade, Bairro FROM Usuario WHERE Email='" .$Email ."'") or die(mysqli_error($conexao));
@@ -110,7 +110,7 @@ function RecuperaUsuario(){
 			$emailCadastrado = false;
 			
 			//Evita SQL injection
-			$Email = mysqli_real_escape_string($conexao,$dados["Email"]);
+			$Email = utf8_decode(mysqli_real_escape_string($conexao,$dados["Email"]));
 			
 			//Consulta usuário no banco
 			$query = mysqli_query($conexao,"SELECT idUsuario, Nome, Email, Telefone, Cidade, Bairro FROM Usuario WHERE Email='" .$Email ."'") or die(mysqli_error($conexao));
@@ -167,11 +167,11 @@ function AtualizaUsuario($id){
 				
 				//Evita SQL injection
 				$id = mysqli_real_escape_string($conexao,$id);
-				$Nome = mysqli_real_escape_string($conexao,$dados["Nome"]);
-				$Email = mysqli_real_escape_string($conexao,$dados["Email"]);
+				$Nome = utf8_decode(mysqli_real_escape_string($conexao,$dados["Nome"]));
+				$Email = utf8_decode(mysqli_real_escape_string($conexao,$dados["Email"]));
 				$Telefone = mysqli_real_escape_string($conexao,$dados["Telefone"]);
-				$Cidade = mysqli_real_escape_string($conexao,$dados["Cidade"]);
-				$Bairro = mysqli_real_escape_string($conexao,$dados["Bairro"]);
+				$Cidade = utf8_decode(mysqli_real_escape_string($conexao,$dados["Cidade"]));
+				$Bairro = utf8_decode(mysqli_real_escape_string($conexao,$dados["Bairro"]));
 				
 				//Consulta usuário no banco
 				$query = mysqli_query($conexao, "UPDATE Usuario SET Nome = '" .$Nome ."', Email = '" .$Email ."', Telefone = '" .$Telefone ."', Cidade = '" .$Cidade ."', Bairro = '" .$Bairro ."' WHERE idUsuario=" .$id) or die(mysqli_error($conexao));

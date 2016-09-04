@@ -100,13 +100,13 @@ function InsereAnimal(){
 			//$emailCadastrado = false;
 			
 			//Evita SQL injection
-			$Nome = mysqli_real_escape_string($conexao,$dados["Nome"]);
-			$Genero = mysqli_real_escape_string($conexao,$dados["Genero"]);
-			$Cor = mysqli_real_escape_string($conexao,$dados["Cor"]);
-			$Porte = mysqli_real_escape_string($conexao,$dados["Porte"]);
+			$Nome = utf8_decode(mysqli_real_escape_string($conexao,$dados["Nome"]));
+			$Genero = utf8_decode(mysqli_real_escape_string($conexao,$dados["Genero"]));
+			$Cor = utf8_decode(mysqli_real_escape_string($conexao,$dados["Cor"]));
+			$Porte = utf8_decode(mysqli_real_escape_string($conexao,$dados["Porte"]));
 			$Idade = mysqli_real_escape_string($conexao,$dados["Idade"]);
-			$Caracteristicas = mysqli_real_escape_string($conexao,$dados["Caracteristicas"]);
-			$QRCode = mysqli_real_escape_string($conexao,$dados["QRCode"]);
+			$Caracteristicas = utf8_decode(mysqli_real_escape_string($conexao,$dados["Caracteristicas"]));
+			$QRCode = utf8_decode(mysqli_real_escape_string($conexao,$dados["QRCode"]));
 			$Desaparecido = mysqli_real_escape_string($conexao,$dados["Desaparecido"]);
 			$idUsuario = mysqli_real_escape_string($conexao,$dados["idUsuario"]);
 			$idRaca = mysqli_real_escape_string($conexao,$dados["idRaca"]);
@@ -228,13 +228,13 @@ function AtualizaAnimal($id){
 				include("conectar.php");
 				
 				//Evita SQL injection
-				$Nome = mysqli_real_escape_string($conexao,$dados["Nome"]);
-				$Genero = mysqli_real_escape_string($conexao,$dados["Genero"]);
-				$Cor = mysqli_real_escape_string($conexao,$dados["Cor"]);
-				$Porte = mysqli_real_escape_string($conexao,$dados["Porte"]);
+				$Nome = utf8_decode(mysqli_real_escape_string($conexao,$dados["Nome"]));
+				$Genero = utf8_decode(mysqli_real_escape_string($conexao,$dados["Genero"]));
+				$Cor = utf8_decode(mysqli_real_escape_string($conexao,$dados["Cor"]));
+				$Porte = utf8_decode(mysqli_real_escape_string($conexao,$dados["Porte"]));
 				$Idade = mysqli_real_escape_string($conexao,$dados["Idade"]);
-				$Caracteristicas = mysqli_real_escape_string($conexao,$dados["Caracteristicas"]);
-				$QRCode = mysqli_real_escape_string($conexao,$dados["QRCode"]);
+				$Caracteristicas = utf8_decode(mysqli_real_escape_string($conexao,$dados["Caracteristicas"]));
+				$QRCode = utf8_decode(mysqli_real_escape_string($conexao,$dados["QRCode"]));
 				$Desaparecido = mysqli_real_escape_string($conexao,$dados["Desaparecido"]);
 				$idUsuario = mysqli_real_escape_string($conexao,$dados["idUsuario"]);
 				$idRaca = mysqli_real_escape_string($conexao,$dados["idRaca"]);

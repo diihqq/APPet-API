@@ -53,7 +53,7 @@ function InsereEstabelecimentoFavorito(){
 			$EstabelecimentoCadastrado = false;
 			
 			//Evita SQL injection
-			$Nome = mysqli_real_escape_string($conexao,$dados["Nome"]);
+			$Nome = utf8_decode(mysqli_real_escape_string($conexao,$dados["Nome"]));
 			$Latitude = mysqli_real_escape_string($conexao,$dados["Latitude"]);
 			$Longitude = mysqli_real_escape_string($conexao,$dados["Longitude"]);
 			$idUsuario = mysqli_real_escape_string($conexao,$dados["idUsuario"]);
@@ -118,7 +118,7 @@ function AtualizaEstFavorito($id){
 				
 				//Evita SQL injection
 				$id = mysqli_real_escape_string($conexao,$id);
-				$Nome = mysqli_real_escape_string($conexao,$dados["Nome"]);
+				$Nome = utf8_decode(mysqli_real_escape_string($conexao,$dados["Nome"]));
 				$Latitude = mysqli_real_escape_string($conexao,$dados["Latitude"]);
 				$Longitude = mysqli_real_escape_string($conexao,$dados["Longitude"]);
 				$idUsuario = mysqli_real_escape_string($conexao,$dados["idUsuario"]);

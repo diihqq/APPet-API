@@ -57,6 +57,14 @@ function mensagens($codigo){
 						"Codigo"=>14
 						,"Mensagem"=>"Um ID deve ser passado como parâmetro!"
 					)
+					,array(
+						"Codigo"=>15
+						,"Mensagem"=>"Evento ja cadastrado!"
+					)
+					,array(
+						"Codigo"=>16
+						,"Mensagem"=>"O campo Tipo deve ser passado!"
+					)
 				 );
 
 	$retorno = array();

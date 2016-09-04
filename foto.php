@@ -55,7 +55,7 @@ function InsereFoto(){
 			include("conectar.php");
 			
 			//Evita SQL injection
-			$Caminho = mysqli_real_escape_string($conexao,$dados["Caminho"]);
+			$Caminho = utf8_decode(mysqli_real_escape_string($conexao,$dados["Caminho"]));
 			$idAnimal = mysqli_real_escape_string($conexao,$dados["idAnimal"]);
 			
 

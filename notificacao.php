@@ -49,7 +49,7 @@ function InsereNotificacao(){
 			include("conectar.php");
 			
 			//Evita SQL injection
-			$Mensagem = mysqli_real_escape_string($conexao,$dados["Mensagem"]);
+			$Mensagem = utf8_decode(mysqli_real_escape_string($conexao,$dados["Mensagem"]));
 			$idUsuario = mysqli_real_escape_string($conexao,$dados["idUsuario"]);
 			
 
