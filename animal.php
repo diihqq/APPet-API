@@ -269,7 +269,7 @@ function ExcluiAnimal($id){
 		$id = mysqli_real_escape_string($conexao,$id);
 		
 		//Consulta usuário no banco
-		$query = mysqli_query($conexao, "DELETE FROM A WHERE idAnimal=" .$id) or die(mysqli_error($conexao));
+		$query = mysqli_query($conexao, "DELETE FROM Animal WHERE idAnimal=" .$id) or die(mysqli_error($conexao));
 		$resposta = mensagens(11);
 	}
 

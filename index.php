@@ -13,6 +13,9 @@
 	include('localizacao.php');
 	include('alerta.php');
 	include('evento.php');
+	include('vacina.php');
+	include('medicamento.php');
+	include('compromisso.php');
 
     //Recupera os valores da URL
 	$metodo = $_SERVER['REQUEST_METHOD'];
