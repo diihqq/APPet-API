@@ -51,7 +51,7 @@ function ListaEventosPorUsuario($id){
 	
 	//Consulta evento no banco
 	if($id == 0){
-		$resposta = mensagens[9];
+		$resposta = mensagens(9);
 	}else{
 		$query = mysqli_query($conexao,"SELECT E.idEvento, E.Nome, E.Observacoes, E.FlagAlerta, E.idAlerta, A.NivelAlerta, A.Frequencia as 'FrequenciaAlerta', E.idAnimal, E.Tipo, AN.Nome as 'NomeAnimal', AN.Genero, AN.Cor, AN.Cor, AN.Porte, AN.Idade, AN.Caracteristicas, AN.QRCode, AN.Desaparecido, AN.idUsuario, AN.idRaca,  M.Inicio, M.Fim, M.FrequenciaDiaria, M.HorasDeEspera, V.Aplicada, V.DataAplicacao, V.DataValidade, V.FrequenciaAnual, V.QtdDoses, C.NomeLocal, C.Latitude, C.Longitude, C.DataHora FROM Evento as E LEFT JOIN Medicamento as M on E.idEvento = M.idEvento LEFT JOIN Vacina as V on E.idEvento = V.idEvento LEFT JOIN Compromisso as C on E.idEvento = C.idEvento LEFT JOIN Alerta as A on E.idAlerta = A.idAlerta LEFT JOIN Animal as AN on E.idAnimal = AN.idAnimal WHERE AN.idUsuario = ".$id ." ORDER BY E.idEvento") or die(mysqli_error($conexao));
 	}
@@ -104,7 +104,7 @@ function ListaEventosPorAnimal($id){
 	
 	//Consulta evento no banco
 	if($id == 0){
-		$resposta = mensagens[9];
+		$resposta = mensagens(9);
 	}else{
 		$query = mysqli_query($conexao,"SELECT E.idEvento, E.Nome, E.Observacoes, E.FlagAlerta, E.idAlerta, A.NivelAlerta, A.Frequencia as 'FrequenciaAlerta', E.idAnimal, E.Tipo, M.Inicio, M.Fim, M.FrequenciaDiaria, M.HorasDeEspera, V.Aplicada, V.DataAplicacao, V.DataValidade, V.FrequenciaAnual, V.QtdDoses, C.NomeLocal, C.Latitude, C.Longitude, C.DataHora FROM Evento as E LEFT JOIN Medicamento as M on E.idEvento = M.idEvento LEFT JOIN Vacina as V on E.idEvento = V.idEvento LEFT JOIN Compromisso as C on E.idEvento = C.idEvento LEFT JOIN Alerta as A on E.idAlerta = A.idAlerta WHERE E.idAnimal = ".$id ." ORDER BY E.idEvento") or die(mysqli_error($conexao));
 	}
