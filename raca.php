@@ -20,7 +20,7 @@ function ListaRacas($id){
 							'NomeRaca' => $dados['NomeRaca'],
 							'Descricao' => $dados['Descricao'],
 							'idEspecie' => $dados['idEspecie'],
-							'NomeEspecie' => $dados['NomeEspecie'];
+							'NomeEspecie' => $dados['NomeEspecie']);
 	}
 	
 	return $resposta;

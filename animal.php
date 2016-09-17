@@ -19,7 +19,7 @@ function ListaAnimais($id){
 							'Nome' => $dados['Nome'],
 							'Genero' => $dados['Genero'],
 							'Cor' => $dados['Cor'],
-							'Porte' => $dados['Porte'];
+							'Porte' => $dados['Porte'],
 							'Idade' => $dados['Idade'],
 							'Caracteristicas' => $dados['Caracteristicas'],
 							'QRCode' => $dados['QRCode'],
