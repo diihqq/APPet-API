@@ -17,14 +17,14 @@ function ListaDispositivos($id){
 	while($dados = mysqli_fetch_array($query))
 	{
 		$resposta[] = array('idDispositivo' => $dados['idDispositivo'],
-							'ChaveAPI' => utf8_encode($dados['ChaveAPI']),
-							'IMEI' => utf8_encode($dados['IMEI']),
+							'ChaveAPI' => $dados['ChaveAPI'],
+							'IMEI' => $dados['IMEI'],
 							'Principal' => $dados['Principal'],
-							'Nome' => utf8_encode($dados['Nome']),
-							'Email' => utf8_encode($dados['Email']),
+							'Nome' => $dados['Nome'],
+							'Email' => $dados['Email'],
 							'Telefone' => $dados['Telefone'],
-							'Cidade' => utf8_encode($dados['Cidade']),
-							'Bairro' => utf8_encode($dados['Bairro']));
+							'Cidade' => $dados['Cidade'],
+							'Bairro' => $dados['Bairro']);
 	}
 	
 	return $resposta;

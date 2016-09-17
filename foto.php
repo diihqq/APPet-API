@@ -16,15 +16,15 @@ function ListaFotosPorAnimal($id){
 	while($dados = mysqli_fetch_array($query))
 	{
 		$resposta[] = array('idFoto' => $dados['idFoto'],
-							'Caminho' => utf8_encode($dados['Caminho']),
+							'Caminho' => $dados['Caminho'],
 							'idAnimal' => $dados['idAnimal'],
-							'Nome' => utf8_encode($dados['Nome']),
-							'Genero' => utf8_encode($dados['Genero']),
-							'Cor' => utf8_encode($dados['Cor']),
-							'Porte' => utf8_encode($dados['Porte']),
+							'Nome' => $dados['Nome'],
+							'Genero' => $dados['Genero'],
+							'Cor' => $dados['Cor'],
+							'Porte' => $dados['Porte'],
 							'Idade' => $dados['Idade'],
-							'Caracteristicas' => utf8_encode($dados['Caracteristicas']),
-							'QRCode' => utf8_encode($dados['QRCode']),
+							'Caracteristicas' => $dados['Caracteristicas'],
+							'QRCode' => $dados['QRCode'],
 							'Desaparecido' => $dados['Desaparecido'],
 							'idUsuario' => $dados['idUsuario'],
 							'idRaca' => $dados['idRaca']);
@@ -55,7 +55,7 @@ function InsereFoto(){
 			include("conectar.php");
 			
 			//Evita SQL injection
-			$Caminho = utf8_decode(mysqli_real_escape_string($conexao,$dados["Caminho"]));
+			$Caminho = mysqli_real_escape_string($conexao,$dados["Caminho"]);
 			$idAnimal = mysqli_real_escape_string($conexao,$dados["idAnimal"]);
 			
 

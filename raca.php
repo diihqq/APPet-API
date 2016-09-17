@@ -17,10 +17,10 @@ function ListaRacas($id){
 	while($dados = mysqli_fetch_array($query))
 	{
 		$resposta[] = array('idRaca' => $dados['idRaca'],
-							'NomeRaca' => utf8_encode($dados['NomeRaca']),
-							'Descricao' => utf8_encode($dados['Descricao']),
+							'NomeRaca' => $dados['NomeRaca'],
+							'Descricao' => $dados['Descricao'],
 							'idEspecie' => $dados['idEspecie'],
-							'NomeEspecie' => utf8_encode($dados['NomeEspecie']));
+							'NomeEspecie' => $dados['NomeEspecie'];
 	}
 	
 	return $resposta;
@@ -43,10 +43,10 @@ function ListaRacasPorEspecie($id){
 		while($dados = mysqli_fetch_array($query))
 		{
 			$resposta[] = array('idRaca' => $dados['idRaca'],
-								'NomeRaca' => utf8_encode($dados['NomeRaca']),
-								'Descricao' => utf8_encode($dados['Descricao']),
+								'NomeRaca' => $dados['NomeRaca'],
+								'Descricao' => $dados['Descricao'],
 								'idEspecie' => $dados['idEspecie'],
-								'NomeEspecie' => utf8_encode($dados['NomeEspecie']));
+								'NomeEspecie' => $dados['NomeEspecie']);
 		}
 	}
 	return $resposta;

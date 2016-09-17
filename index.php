@@ -1,5 +1,5 @@
 <?php 
-	//Inclui arquivos com as funções da API.
+	//Inclui arquivos com as funÃ§Ãµes da API.
 	include('mensagem.php');
 	include('usuario.php');
 	include('raca.php');
@@ -29,15 +29,15 @@
 
 	$resposta = array();
 
-	//Verifica se o método utilizado na request é POST
+	//Verifica se o mÃ©todo utilizado na request Ã© POST
 	if($metodo == "POST"){	
-		//Verifica se a função informada existe.
+		//Verifica se a funÃ§Ã£o informada existe.
 		if(function_exists($funcao)){
-			//Chama função.
+			//Chama funÃ§Ã£o.
 			$resposta = $funcao($id);
 		}
 		else{
-			//Caso a função nao exista retorna erro.
+			//Caso a funÃ§Ã£o nao exista retorna erro.
 			$resposta = mensagens(1);
 		}
 	}
@@ -47,6 +47,6 @@
 	}
     
     //Retorna a resposta
-	header('Content-Type: application/json');
+	header('Content-Type: application/json; charset=utf-8');
     echo json_encode($resposta);
 ?>

@@ -16,14 +16,14 @@ function ListaEventos($id){
 	while($dados = mysqli_fetch_array($query))
 	{
 		$resposta[] = array('idEvento' => $dados['idEvento'],
-							'Nome' => utf8_encode($dados['Nome']),
-							'Observacoes' => utf8_encode($dados['Observacoes']),
+							'Nome' => $dados['Nome'],
+							'Observacoes' => $dados['Observacoes'],
 							'FlagAlerta' => $dados['FlagAlerta'],
 							'idAlerta' => $dados['idAlerta'],
-							'NivelAlerta' => utf8_encode($dados['NivelAlerta']),
+							'NivelAlerta' => $dados['NivelAlerta'],
 							'FrequenciaAlerta' => $dados['FrequenciaAlerta'],
 							'idAnimal' => $dados['idAnimal'],
-							'Tipo' => utf8_encode($dados['Tipo']),
+							'Tipo' => $dados['Tipo'],
 							'Inicio' => $dados['Inicio'],
 							'Fim' => $dados['Fim'],
 							'FrequenciaDiaria' => $dados['FrequenciaDiaria'],
@@ -33,9 +33,9 @@ function ListaEventos($id){
 							'DataValidade' => $dados['DataValidade'],
 							'FrequenciaAnual' => $dados['FrequenciaAnual'],
 							'QtdDoses' => $dados['QtdDoses'],
-							'NomeLocal' => utf8_encode($dados['NomeLocal']),
-							'Latitude' => utf8_encode($dados['Latitude']),
-							'Longitude' => utf8_encode($dados['Longitude']),
+							'NomeLocal' => $dados['NomeLocal'],
+							'Latitude' => $dados['Latitude'],
+							'Longitude' => $dados['Longitude'],
 							'DataHora' => $dados['DataHora']);
 	}
 	
@@ -59,21 +59,21 @@ function ListaEventosPorUsuario($id){
 	while($dados = mysqli_fetch_array($query))
 	{
 		$resposta[] = array('idEvento' => $dados['idEvento'],
-							'Nome' => utf8_encode($dados['Nome']),
-							'Observacoes' => utf8_encode($dados['Observacoes']),
+							'Nome' => $dados['Nome'],
+							'Observacoes' => $dados['Observacoes'],
 							'FlagAlerta' => $dados['FlagAlerta'],
 							'idAlerta' => $dados['idAlerta'],
-							'NivelAlerta' => utf8_encode($dados['NivelAlerta']),
+							'NivelAlerta' => $dados['NivelAlerta'],
 							'FrequenciaAlerta' => $dados['FrequenciaAlerta'],
 							'idAnimal' => $dados['idAnimal'],
-							'Tipo' => utf8_encode($dados['Tipo']),
-							'NomeAnimal' => utf8_encode($dados['NomeAnimal']),
-							'Genero' => utf8_encode($dados['Genero']),
-							'Cor' => utf8_encode($dados['Cor']),
-							'Porte' => utf8_encode($dados['Porte']),
+							'Tipo' => $dados['Tipo'],
+							'NomeAnimal' => $dados['NomeAnimal'],
+							'Genero' => $dados['Genero'],
+							'Cor' => $dados['Cor'],
+							'Porte' => $dados['Porte'],
 							'Idade' => $dados['Idade'],
-							'Caracteristicas' => utf8_encode($dados['Caracteristicas']),
-							'QRCode' => utf8_encode($dados['QRCode']),
+							'Caracteristicas' => $dados['Caracteristicas'],
+							'QRCode' => $dados['QRCode'],
 							'Desaparecido' => $dados['Desaparecido'],
 							'idUsuario' => $dados['idUsuario'],
 							'idRaca' => $dados['idRaca'],
@@ -86,9 +86,9 @@ function ListaEventosPorUsuario($id){
 							'DataValidade' => $dados['DataValidade'],
 							'FrequenciaAnual' => $dados['FrequenciaAnual'],
 							'QtdDoses' => $dados['QtdDoses'],
-							'NomeLocal' => utf8_encode($dados['NomeLocal']),
-							'Latitude' => utf8_encode($dados['Latitude']),
-							'Longitude' => utf8_encode($dados['Longitude']),
+							'NomeLocal' => $dados['NomeLocal'],
+							'Latitude' => $dados['Latitude'],
+							'Longitude' => $dados['Longitude'],
 							'DataHora' => $dados['DataHora']);
 	}
 	
@@ -112,14 +112,14 @@ function ListaEventosPorAnimal($id){
 	while($dados = mysqli_fetch_array($query))
 	{
 		$resposta[] = array('idEvento' => $dados['idEvento'],
-							'Nome' => utf8_encode($dados['Nome']),
-							'Observacoes' => utf8_encode($dados['Observacoes']),
+							'Nome' => $dados['Nome'],
+							'Observacoes' => $dados['Observacoes'],
 							'FlagAlerta' => $dados['FlagAlerta'],
 							'idAlerta' => $dados['idAlerta'],
-							'NivelAlerta' => utf8_encode($dados['NivelAlerta']),
+							'NivelAlerta' => $dados['NivelAlerta'],
 							'FrequenciaAlerta' => $dados['FrequenciaAlerta'],
 							'idAnimal' => $dados['idAnimal'],
-							'Tipo' => utf8_encode($dados['Tipo']),
+							'Tipo' => $dados['Tipo'],
 							'Inicio' => $dados['Inicio'],
 							'Fim' => $dados['Fim'],
 							'FrequenciaDiaria' => $dados['FrequenciaDiaria'],
@@ -129,9 +129,9 @@ function ListaEventosPorAnimal($id){
 							'DataValidade' => $dados['DataValidade'],
 							'FrequenciaAnual' => $dados['FrequenciaAnual'],
 							'QtdDoses' => $dados['QtdDoses'],
-							'NomeLocal' => utf8_encode($dados['NomeLocal']),
-							'Latitude' => utf8_encode($dados['Latitude']),
-							'Longitude' => utf8_encode($dados['Longitude']),
+							'NomeLocal' => $dados['NomeLocal'],
+							'Latitude' => $dados['Latitude'],
+							'Longitude' => $dados['Longitude'],
 							'DataHora' => $dados['DataHora']);
 	}
 	
@@ -162,17 +162,17 @@ function InsereEvento(){
 			$eventoCadastrado = false;
 			
 			//Evita SQL injection
-			$Nome = utf8_decode(mysqli_real_escape_string($conexao,$dados["Nome"]));
+			$Nome = mysqli_real_escape_string($conexao,$dados["Nome"]);
 			$FlagAlerta = mysqli_real_escape_string($conexao,$dados["FlagAlerta"]);
 			$idAlerta = mysqli_real_escape_string($conexao,$dados["idAlerta"]);
 			$idAnimal = mysqli_real_escape_string($conexao,$dados["idAnimal"]);
-			$Tipo = utf8_decode(mysqli_real_escape_string($conexao,$dados["Tipo"]));
+			$Tipo = mysqli_real_escape_string($conexao,$dados["Tipo"]);
 			
 			//Campos da Tabela Vacina
 			if(!isset($dados["Observacoes"])){
 				$Observacoes = 'NULL';
 			}else{
-				$Observacoes = utf8_decode(mysqli_real_escape_string($conexao,$dados["Observacoes"]));
+				$Observacoes = mysqli_real_escape_string($conexao,$dados["Observacoes"]);
 			}
 			
 			if(!isset($dados["DataAplicacao"])){

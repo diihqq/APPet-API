@@ -17,17 +17,17 @@ function ListaCompromissos($id){
 	while($dados = mysqli_fetch_array($query))
 	{
 		$resposta[] = array('idEvento' => $dados['idEvento'],
-							'Nome' => utf8_encode($dados['Nome']),
-							'Observacoes' => utf8_encode($dados['Observacoes']),
+							'Nome' => $dados['Nome'],
+							'Observacoes' => $dados['Observacoes'],
 							'FlagAlerta' => $dados['FlagAlerta'],
 							'idAlerta' => $dados['idAlerta'],
-							'NivelAlerta' => utf8_encode($dados['NivelAlerta']),
+							'NivelAlerta' => $dados['NivelAlerta'],
 							'FrequenciaAlerta' => $dados['FrequenciaAlerta'],
 							'idAnimal' => $dados['idAnimal'],
-							'Tipo' => utf8_encode($dados['Tipo']),
-							'NomeLocal' => utf8_encode($dados['NomeLocal']),
-							'Latitude' => utf8_encode($dados['Latitude']),
-							'Longitude' => utf8_encode($dados['Longitude']),
+							'Tipo' => $dados['Tipo'],
+							'NomeLocal' => $dados['NomeLocal'],
+							'Latitude' => $dados['Latitude'],
+							'Longitude' => $dados['Longitude'],
 							'DataHora' => $dados['DataHora']);
 	}
 	
@@ -51,17 +51,17 @@ function ListaCompromissosPendentes($id){
 	while($dados = mysqli_fetch_array($query))
 	{
 		$resposta[] = array('idEvento' => $dados['idEvento'],
-							'Nome' => utf8_encode($dados['Nome']),
-							'Observacoes' => utf8_encode($dados['Observacoes']),
+							'Nome' => $dados['Nome'],
+							'Observacoes' => $dados['Observacoes'],
 							'FlagAlerta' => $dados['FlagAlerta'],
 							'idAlerta' => $dados['idAlerta'],
-							'NivelAlerta' => utf8_encode($dados['NivelAlerta']),
+							'NivelAlerta' => $dados['NivelAlerta'],
 							'FrequenciaAlerta' => $dados['FrequenciaAlerta'],
 							'idAnimal' => $dados['idAnimal'],
-							'Tipo' => utf8_encode($dados['Tipo']),
-							'NomeLocal' => utf8_encode($dados['NomeLocal']),
-							'Latitude' => utf8_encode($dados['Latitude']),
-							'Longitude' => utf8_encode($dados['Longitude']),
+							'Tipo' => $dados['Tipo'],
+							'NomeLocal' => $dados['NomeLocal'],
+							'Latitude' => $dados['Latitude'],
+							'Longitude' => $dados['Longitude'],
 							'DataHora' => $dados['DataHora']);
 	}
 	
@@ -98,7 +98,7 @@ function AtualizaCompromisso($id){
 				include("conectar.php");
 				
 				//Evita SQL injection
-				$NomeLocal = utf8_decode(mysqli_real_escape_string($conexao,$dados["NomeLocal"]));
+				$NomeLocal = mysqli_real_escape_string($conexao,$dados["NomeLocal"]);
 				$Latitude = mysqli_real_escape_string($conexao,$dados["Latitude"]);
 				$Longitude = mysqli_real_escape_string($conexao,$dados["Longitude"]);
 				$DataHora = mysqli_real_escape_string($conexao,$dados["DataHora"]);

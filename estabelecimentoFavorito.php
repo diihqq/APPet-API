@@ -16,14 +16,14 @@ function ListaEstFavoritosPorUsuario($id){
 		while($dados = mysqli_fetch_array($query))
 		{
 			$resposta[] = array('idEstabelecimentoFavorito' => $dados['idEstabelecimentoFavorito'],
-								'NomeEstFavorito' => utf8_encode($dados['NomeEstFavorito']),
+								'NomeEstFavorito' => $dados['NomeEstFavorito'],
 								'Latitude' => $dados['Latitude'],
 								'idUsuario' => $dados['idUsuario'],
-								'NomeUsuario' => utf8_encode($dados['NomeUsuario']),
-								'Email' => utf8_encode($dados['Email']),
+								'NomeUsuario' => $dados['NomeUsuario'],
+								'Email' => $dados['Email'],
 								'Telefone' => $dados['Telefone'],
-								'Cidade' => utf8_encode($dados['Cidade']),
-								'Bairro' => utf8_encode($dados['Bairro']));
+								'Cidade' => $dados['Cidade'],
+								'Bairro' => $dados['Bairro']);
 		}
 	}
 	return $resposta;
@@ -53,7 +53,7 @@ function InsereEstabelecimentoFavorito(){
 			$EstabelecimentoCadastrado = false;
 			
 			//Evita SQL injection
-			$Nome = utf8_decode(mysqli_real_escape_string($conexao,$dados["Nome"]));
+			$Nome = mysqli_real_escape_string($conexao,$dados["Nome"]);
 			$Latitude = mysqli_real_escape_string($conexao,$dados["Latitude"]);
 			$Longitude = mysqli_real_escape_string($conexao,$dados["Longitude"]);
 			$idUsuario = mysqli_real_escape_string($conexao,$dados["idUsuario"]);
@@ -118,7 +118,7 @@ function AtualizaEstFavorito($id){
 				
 				//Evita SQL injection
 				$id = mysqli_real_escape_string($conexao,$id);
-				$Nome = utf8_decode(mysqli_real_escape_string($conexao,$dados["Nome"]));
+				$Nome = mysqli_real_escape_string($conexao,$dados["Nome"]);
 				$Latitude = mysqli_real_escape_string($conexao,$dados["Latitude"]);
 				$Longitude = mysqli_real_escape_string($conexao,$dados["Longitude"]);
 				$idUsuario = mysqli_real_escape_string($conexao,$dados["idUsuario"]);

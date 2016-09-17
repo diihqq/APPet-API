@@ -16,7 +16,7 @@ function ListaAlertas($id){
 	while($dados = mysqli_fetch_array($query))
 	{
 		$resposta[] = array('idAlerta' => $dados['idAlerta'],
-							'NivelAlerta' => utf8_encode($dados['NivelAlerta']),
+							'NivelAlerta' => $dados['NivelAlerta'],
 							'Frequencia' => $dados['Frequencia']);
 	}
 	

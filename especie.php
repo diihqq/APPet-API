@@ -16,7 +16,7 @@ function ListaEspecies($id){
 	while($dados = mysqli_fetch_array($query))
 	{
 		$resposta[] = array('idEspecie' => $dados['idEspecie'],
-							'Nome' => utf8_encode($dados['Nome']));
+							'Nome' => $dados['Nome']);
 	}
 	
 	return $resposta;

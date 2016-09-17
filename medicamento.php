@@ -17,14 +17,14 @@ function ListaMedicamentos($id){
 	while($dados = mysqli_fetch_array($query))
 	{
 		$resposta[] = array('idEvento' => $dados['idEvento'],
-							'Nome' => utf8_encode($dados['Nome']),
-							'Observacoes' => utf8_encode($dados['Observacoes']),
+							'Nome' => $dados['Nome'],
+							'Observacoes' => $dados['Observacoes'],
 							'FlagAlerta' => $dados['FlagAlerta'],
 							'idAlerta' => $dados['idAlerta'],
-							'NivelAlerta' => utf8_encode($dados['NivelAlerta']),
+							'NivelAlerta' => $dados['NivelAlerta'],
 							'FrequenciaAlerta' => $dados['FrequenciaAlerta'],
 							'idAnimal' => $dados['idAnimal'],
-							'Tipo' => utf8_encode($dados['Tipo']),
+							'Tipo' => $dados['Tipo'],
 							'Inicio' => $dados['Inicio'],
 							'Fim' => $dados['Fim'],
 							'FrequenciaDiaria' => $dados['FrequenciaDiaria'],

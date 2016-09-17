@@ -16,22 +16,22 @@ function ListaAnimais($id){
 	while($dados = mysqli_fetch_array($query))
 	{
 		$resposta[] = array('idAnimal' => $dados['idAnimal'],
-							'Nome' => utf8_encode($dados['Nome']),
-							'Genero' => utf8_encode($dados['Genero']),
-							'Cor' => utf8_encode($dados['Cor']),
-							'Porte' => utf8_encode($dados['Porte']),
+							'Nome' => $dados['Nome'],
+							'Genero' => $dados['Genero'],
+							'Cor' => $dados['Cor'],
+							'Porte' => $dados['Porte'];
 							'Idade' => $dados['Idade'],
-							'Caracteristicas' => utf8_encode($dados['Caracteristicas']),
-							'QRCode' => utf8_encode($dados['QRCode']),
+							'Caracteristicas' => $dados['Caracteristicas'],
+							'QRCode' => $dados['QRCode'],
 							'Desaparecido' => $dados['Desaparecido'],
 							'idUsuario' => $dados['idUsuario'],
 							'idRaca' => $dados['idRaca'],
-							'NomeRaca' => utf8_encode($dados['NomeRaca']),
-							'NomeUsuario' => utf8_encode($dados['NomeUsuario']),
-							'Email' => utf8_encode($dados['Email']),
+							'NomeRaca' => $dados['NomeRaca'],
+							'NomeUsuario' => $dados['NomeUsuario'],
+							'Email' => $dados['Email'],
 							'Telefone' => $dados['Telefone'],
-							'Cidade' => utf8_encode($dados['Cidade']),
-							'Bairro' => utf8_encode($dados['Bairro']));
+							'Cidade' => $dados['Cidade'],
+							'Bairro' => $dados['Bairro']);
 	}
 	return $resposta;
 }
@@ -53,22 +53,22 @@ function ListaAnimaisDesaparecidos($id){
 	while($dados = mysqli_fetch_array($query))
 	{
 		$resposta[] = array('idAnimal' => $dados['idAnimal'],
-							'Nome' => utf8_encode($dados['Nome']),
-							'Genero' => utf8_encode($dados['Genero']),
-							'Cor' => utf8_encode($dados['Cor']),
-							'Porte' => utf8_encode($dados['Porte']),
+							'Nome' => $dados['Nome'],
+							'Genero' => $dados['Genero'],
+							'Cor' => $dados['Cor'],
+							'Porte' => $dados['Porte'],
 							'Idade' => $dados['Idade'],
-							'Caracteristicas' => utf8_encode($dados['Caracteristicas']),
-							'QRCode' => utf8_encode($dados['QRCode']),
+							'Caracteristicas' => $dados['Caracteristicas'],
+							'QRCode' => $dados['QRCode'],
 							'Desaparecido' => $dados['Desaparecido'],
 							'idUsuario' => $dados['idUsuario'],
 							'idRaca' => $dados['idRaca'],
-							'NomeRaca' => utf8_encode($dados['NomeRaca']),
-							'NomeUsuario' => utf8_encode($dados['NomeUsuario']),
-							'Email' => utf8_encode($dados['Email']),
+							'NomeRaca' => $dados['NomeRaca'],
+							'NomeUsuario' => $dados['NomeUsuario'],
+							'Email' => $dados['Email'],
 							'Telefone' => $dados['Telefone'],
-							'Cidade' => utf8_encode($dados['Cidade']),
-							'Bairro' => utf8_encode($dados['Bairro']));
+							'Cidade' => $dados['Cidade'],
+							'Bairro' => $dados['Bairro']);
 	}
 	return $resposta;
 }
@@ -100,13 +100,13 @@ function InsereAnimal(){
 			//$emailCadastrado = false;
 			
 			//Evita SQL injection
-			$Nome = utf8_decode(mysqli_real_escape_string($conexao,$dados["Nome"]));
-			$Genero = utf8_decode(mysqli_real_escape_string($conexao,$dados["Genero"]));
-			$Cor = utf8_decode(mysqli_real_escape_string($conexao,$dados["Cor"]));
-			$Porte = utf8_decode(mysqli_real_escape_string($conexao,$dados["Porte"]));
+			$Nome = mysqli_real_escape_string($conexao,$dados["Nome"]);
+			$Genero = mysqli_real_escape_string($conexao,$dados["Genero"]);
+			$Cor = mysqli_real_escape_string($conexao,$dados["Cor"]);
+			$Porte = mysqli_real_escape_string($conexao,$dados["Porte"]);
 			$Idade = mysqli_real_escape_string($conexao,$dados["Idade"]);
-			$Caracteristicas = utf8_decode(mysqli_real_escape_string($conexao,$dados["Caracteristicas"]));
-			$QRCode = utf8_decode(mysqli_real_escape_string($conexao,$dados["QRCode"]));
+			$Caracteristicas = mysqli_real_escape_string($conexao,$dados["Caracteristicas"]);
+			$QRCode = mysqli_real_escape_string($conexao,$dados["QRCode"]);
 			$Desaparecido = mysqli_real_escape_string($conexao,$dados["Desaparecido"]);
 			$idUsuario = mysqli_real_escape_string($conexao,$dados["idUsuario"]);
 			$idRaca = mysqli_real_escape_string($conexao,$dados["idRaca"]);
@@ -165,22 +165,22 @@ function RecuperaAnimal($id){
 			while($dados = mysqli_fetch_array($query))
 			{
 				$resposta[] = array('idAnimal' => $dados['idAnimal'],
-							'Nome' => utf8_encode($dados['Nome']),
-							'Genero' => utf8_encode($dados['Genero']),
-							'Cor' => utf8_encode($dados['Cor']),
-							'Porte' => utf8_encode($dados['Porte']),
+							'Nome' => $dados['Nome'],
+							'Genero' => $dados['Genero'],
+							'Cor' => $dados['Cor'],
+							'Porte' => $dados['Porte'],
 							'Idade' => $dados['Idade'],
-							'Caracteristicas' => utf8_encode($dados['Caracteristicas']),
-							'QRCode' => utf8_encode($dados['QRCode']),
+							'Caracteristicas' => $dados['Caracteristicas'],
+							'QRCode' => $dados['QRCode'],
 							'Desaparecido' => $dados['Desaparecido'],
 							'idUsuario' => $dados['idUsuario'],
 							'idRaca' => $dados['idRaca'],
-							'NomeRaca' => utf8_encode($dados['NomeRaca']),
-							'NomeUsuario' => utf8_encode($dados['NomeUsuario']),
-							'Email' => utf8_encode($dados['Email']),
+							'NomeRaca' => $dados['NomeRaca'],
+							'NomeUsuario' => $dados['NomeUsuario'],
+							'Email' => $dados['Email'],
 							'Telefone' => $dados['Telefone'],
-							'Cidade' => utf8_encode($dados['Cidade']),
-							'Bairro' => utf8_encode($dados['Bairro']));
+							'Cidade' => $dados['Cidade'],
+							'Bairro' => $dados['Bairro']);
 							
 			  $animalCadastrado = true;
 			  break;
@@ -228,13 +228,13 @@ function AtualizaAnimal($id){
 				include("conectar.php");
 				
 				//Evita SQL injection
-				$Nome = utf8_decode(mysqli_real_escape_string($conexao,$dados["Nome"]));
-				$Genero = utf8_decode(mysqli_real_escape_string($conexao,$dados["Genero"]));
-				$Cor = utf8_decode(mysqli_real_escape_string($conexao,$dados["Cor"]));
-				$Porte = utf8_decode(mysqli_real_escape_string($conexao,$dados["Porte"]));
+				$Nome = mysqli_real_escape_string($conexao,$dados["Nome"]);
+				$Genero = mysqli_real_escape_string($conexao,$dados["Genero"]);
+				$Cor = mysqli_real_escape_string($conexao,$dados["Cor"]);
+				$Porte = mysqli_real_escape_string($conexao,$dados["Porte"]);
 				$Idade = mysqli_real_escape_string($conexao,$dados["Idade"]);
-				$Caracteristicas = utf8_decode(mysqli_real_escape_string($conexao,$dados["Caracteristicas"]));
-				$QRCode = utf8_decode(mysqli_real_escape_string($conexao,$dados["QRCode"]));
+				$Caracteristicas = mysqli_real_escape_string($conexao,$dados["Caracteristicas"]);
+				$QRCode = mysqli_real_escape_string($conexao,$dados["QRCode"]);
 				$Desaparecido = mysqli_real_escape_string($conexao,$dados["Desaparecido"]);
 				$idUsuario = mysqli_real_escape_string($conexao,$dados["idUsuario"]);
 				$idRaca = mysqli_real_escape_string($conexao,$dados["idRaca"]);

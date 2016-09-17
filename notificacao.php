@@ -16,12 +16,12 @@ function ListaNotificacoesPorUsuario($id){
 		while($dados = mysqli_fetch_array($query))
 		{
 			$resposta[] = array('idNotificacao' => $dados['idNotificacao'],
-								'Mensagem' => utf8_encode($dados['Mensagem']),
-								'Nome' => utf8_encode($dados['Nome']),
-								'Email' => utf8_encode($dados['Email']),
+								'Mensagem' => $dados['Mensagem'],
+								'Nome' => $dados['Nome'],
+								'Email' => $dados['Email'],
 								'Telefone' => $dados['Telefone'],
-								'Cidade' => utf8_encode($dados['Cidade']),
-								'Bairro' => utf8_encode($dados['Bairro']));
+								'Cidade' => $dados['Cidade'],
+								'Bairro' => $dados['Bairro']);
 		}
 	}
 	return $resposta;
@@ -49,7 +49,7 @@ function InsereNotificacao(){
 			include("conectar.php");
 			
 			//Evita SQL injection
-			$Mensagem = utf8_decode(mysqli_real_escape_string($conexao,$dados["Mensagem"]));
+			$Mensagem = mysqli_real_escape_string($conexao,$dados["Mensagem"]);
 			$idUsuario = mysqli_real_escape_string($conexao,$dados["idUsuario"]);
 			
 
