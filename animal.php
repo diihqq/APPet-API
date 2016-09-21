@@ -8,9 +8,9 @@ function ListaAnimais($id){
 	
 	//Consulta animal no banco
 	if($id == 0){
-		$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome , A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Foto, A.Desaparecido, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca") or die(mysqli_error($conexao));
+		$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome , A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Foto, A.Desaparecido, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', R.Descricao as 'DescricaoRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro, E.idEspecie, E.Nome as 'NomeEspecie' FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca INNER JOIN Especie as E on E.idEspecie = R.idEspecie") or die(mysqli_error($conexao));
 	}else{
-		$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome , A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Foto, A.Desaparecido, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca WHERE idAnimal = " .$id) or die(mysqli_error($conexao));
+		$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome , A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Foto, A.Desaparecido, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', R.Descricao as 'DescricaoRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro, E.idEspecie, E.Nome as 'NomeEspecie' FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca INNER JOIN Especie as E on E.idEspecie = R.idEspecie WHERE idAnimal = " .$id) or die(mysqli_error($conexao));
 	}
 	//faz um looping e cria um array com os campos da consulta
 	while($dados = mysqli_fetch_array($query))
@@ -28,11 +28,14 @@ function ListaAnimais($id){
 							'idUsuario' => $dados['idUsuario'],
 							'idRaca' => $dados['idRaca'],
 							'NomeRaca' => $dados['NomeRaca'],
+							'DescricaoRaca' => $dados['DescricaoRaca'],
 							'NomeUsuario' => $dados['NomeUsuario'],
 							'Email' => $dados['Email'],
 							'Telefone' => $dados['Telefone'],
 							'Cidade' => $dados['Cidade'],
-							'Bairro' => $dados['Bairro']);
+							'Bairro' => $dados['Bairro'],
+							'idEspecie' => $dados['idEspecie'],
+							'NomeEspecie' => $dados['NomeEspecie']);
 	}
 	return $resposta;
 }
@@ -46,9 +49,9 @@ function ListaAnimaisDesaparecidos($id){
 	
 	//Consulta animal no banco
 	if($id == 0){
-		$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome , A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Foto, A.Desaparecido, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca WHERE A.Desaparecido = 1") or die(mysqli_error($conexao));
+		$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome , A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Foto, A.Desaparecido, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', R.Descricao as 'DescricaoRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro, E.idEspecie, E.Nome as 'NomeEspecie' FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca INNER JOIN Especie as E on E.idEspecie = R.idEspecie WHERE A.Desaparecido = 1") or die(mysqli_error($conexao));
 	}else{
-		$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome , A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Foto, A.Desaparecido, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca WHERE A.idAnimal = " .$id . " and A.Desaparecido = 1") or die(mysqli_error($conexao));
+		$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome , A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Foto, A.Desaparecido, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', R.Descricao as 'DescricaoRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro, E.idEspecie, E.Nome as 'NomeEspecie' FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca INNER JOIN Especie as E on E.idEspecie = R.idEspecie WHERE A.idAnimal = " .$id . " and A.Desaparecido = 1") or die(mysqli_error($conexao));
 	}
 	//faz um looping e cria um array com os campos da consulta
 	while($dados = mysqli_fetch_array($query))
@@ -66,11 +69,14 @@ function ListaAnimaisDesaparecidos($id){
 							'idUsuario' => $dados['idUsuario'],
 							'idRaca' => $dados['idRaca'],
 							'NomeRaca' => $dados['NomeRaca'],
+							'DescricaoRaca' => $dados['DescricaoRaca'],
 							'NomeUsuario' => $dados['NomeUsuario'],
 							'Email' => $dados['Email'],
 							'Telefone' => $dados['Telefone'],
 							'Cidade' => $dados['Cidade'],
-							'Bairro' => $dados['Bairro']);
+							'Bairro' => $dados['Bairro'],
+							'idEspecie' => $dados['idEspecie'],
+							'NomeEspecie' => $dados['NomeEspecie']);
 	}
 	return $resposta;
 }
@@ -114,6 +120,10 @@ function InsereAnimal(){
 			$idUsuario = mysqli_real_escape_string($conexao,$dados["idUsuario"]);
 			$idRaca = mysqli_real_escape_string($conexao,$dados["idRaca"]);
 			
+			//Faz upload da imagem
+			include("uploadDeFotos.php");
+			$caminhoFoto = uploadDeFotos($Foto);
+			
 			//Recupera idAnimal para incrementar 1
 			$idAnimal = 1;
 			$query = mysqli_query($conexao, "SELECT idAnimal FROM Animal ORDER BY idAnimal DESC LIMIT 1") or die(mysqli_error($conexao));
@@ -124,7 +134,7 @@ function InsereAnimal(){
 			
 			//Insere animal
 			$query = mysqli_query($conexao,"INSERT INTO Animal VALUES(" .$idAnimal .",'" .$Nome ."','" .$Genero ."','" .$Cor ."',
-			'" .$Porte ."'," .$Idade .",'" .$Caracteristicas ."','" .$QRCode ."','" .$Foto ."'," .$Desaparecido ."," .$idUsuario ."," .$idRaca .")") 
+			'" .$Porte ."'," .$Idade .",'" .$Caracteristicas ."','" .$QRCode ."','" .$caminhoFoto ."'," .$Desaparecido ."," .$idUsuario ."," .$idRaca .")") 
 			or die(mysqli_error($conexao));
 			
 			$resposta = mensagens(7);
@@ -161,7 +171,7 @@ function RecuperaAnimal($id){
 			$idUsuario = mysqli_real_escape_string($conexao,$dados["idUsuario"]);
 			
 			//Consulta animal + dono no banco
-			$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome, A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Foto, A.Desaparecido, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca WHERE A.Nome='" .$Nome ."' and A.idUsuario=" .$idUsuario ."") or die(mysqli_error($conexao));
+			$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome, A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Foto, A.Desaparecido, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', R.Descricao as 'DescricaoRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro, E.idEspecie, E.Nome as 'NomeEspecie' FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca INNER JOIN Especie as E on E.idEspecie = R.idEspecie WHERE A.Nome='" .$Nome ."' and A.idUsuario=" .$idUsuario ."") or die(mysqli_error($conexao));
 			
 			
 			//Verifica se foi retornado algum registro
@@ -180,11 +190,14 @@ function RecuperaAnimal($id){
 							'idUsuario' => $dados['idUsuario'],
 							'idRaca' => $dados['idRaca'],
 							'NomeRaca' => $dados['NomeRaca'],
+							'DescricaoRaca' => $dados['DescricaoRaca'],
 							'NomeUsuario' => $dados['NomeUsuario'],
 							'Email' => $dados['Email'],
 							'Telefone' => $dados['Telefone'],
 							'Cidade' => $dados['Cidade'],
-							'Bairro' => $dados['Bairro']);
+							'Bairro' => $dados['Bairro'],
+							'idEspecie' => $dados['idEspecie'],
+							'NomeEspecie' => $dados['NomeEspecie']);
 							
 			  $animalCadastrado = true;
 			  break;
@@ -193,6 +206,65 @@ function RecuperaAnimal($id){
 			//Verifica se o animal foi encontrado
 			if(!$animalCadastrado){
 				$resposta = mensagens(8);
+			}
+		}
+	}
+	
+	return $resposta;
+}
+
+function ListaAnimaisDoUsuario($id){
+	
+	//Recupera conteudo recebido na request
+	$conteudo = file_get_contents("php://input");
+	$resposta = array();
+
+	//Verifica se o conteudo foi recebido
+	if(empty($conteudo)){
+		$resposta = mensagens(2);
+	}
+	else{
+		//Converte o json recebido pra array
+		$dados = json_decode($conteudo,true);
+		
+		//Verifica se as informações esperadas foram recebidas
+		if(!isset($dados["idUsuario"])){
+			$resposta = mensagens(3);
+		}
+		else{
+			include("conectar.php");
+			
+			//Evita SQL injection
+			$idUsuario = mysqli_real_escape_string($conexao,$dados["idUsuario"]);
+			
+			//Consulta animal + dono no banco
+			$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome, A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Foto, A.Desaparecido, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', R.Descricao as 'DescricaoRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro, E.idEspecie, E.Nome as 'NomeEspecie' FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca INNER JOIN Especie as E on E.idEspecie = R.idEspecie WHERE A.idUsuario=" .$idUsuario) or die(mysqli_error($conexao));
+			
+			
+			//Verifica se foi retornado algum registro
+			while($dados = mysqli_fetch_array($query))
+			{
+				$resposta[] = array('idAnimal' => $dados['idAnimal'],
+							'Nome' => $dados['Nome'],
+							'Genero' => $dados['Genero'],
+							'Cor' => $dados['Cor'],
+							'Porte' => $dados['Porte'],
+							'Idade' => $dados['Idade'],
+							'Caracteristicas' => $dados['Caracteristicas'],
+							'QRCode' => $dados['QRCode'],
+							'Foto' => $dados['Foto'],
+							'Desaparecido' => $dados['Desaparecido'],
+							'idUsuario' => $dados['idUsuario'],
+							'idRaca' => $dados['idRaca'],
+							'NomeRaca' => $dados['NomeRaca'],
+							'DescricaoRaca' => $dados['DescricaoRaca'],
+							'NomeUsuario' => $dados['NomeUsuario'],
+							'Email' => $dados['Email'],
+							'Telefone' => $dados['Telefone'],
+							'Cidade' => $dados['Cidade'],
+							'Bairro' => $dados['Bairro'],
+							'idEspecie' => $dados['idEspecie'],
+							'NomeEspecie' => $dados['NomeEspecie']);
 			}
 		}
 	}
