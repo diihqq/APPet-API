@@ -228,17 +228,17 @@ function ListaAnimaisDoUsuario($id){
 		$dados = json_decode($conteudo,true);
 		
 		//Verifica se as informações esperadas foram recebidas
-		if(!isset($dados["idUsuario"])){
+		if(!isset($dados["Email"])){
 			$resposta = mensagens(3);
 		}
 		else{
 			include("conectar.php");
 			
 			//Evita SQL injection
-			$idUsuario = mysqli_real_escape_string($conexao,$dados["idUsuario"]);
+			$email = mysqli_real_escape_string($conexao,$dados["Email"]);
 			
 			//Consulta animal + dono no banco
-			$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome, A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Foto, A.Desaparecido, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', R.Descricao as 'DescricaoRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro, E.idEspecie, E.Nome as 'NomeEspecie' FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca INNER JOIN Especie as E on E.idEspecie = R.idEspecie WHERE A.idUsuario=" .$idUsuario) or die(mysqli_error($conexao));
+			$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome, A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Foto, A.Desaparecido, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', R.Descricao as 'DescricaoRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro, E.idEspecie, E.Nome as 'NomeEspecie' FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca INNER JOIN Especie as E on E.idEspecie = R.idEspecie WHERE U.Email='" .$email ."'") or die(mysqli_error($conexao));
 			
 			
 			//Verifica se foi retornado algum registro
