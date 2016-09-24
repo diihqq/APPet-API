@@ -353,4 +353,133 @@ function ExcluiAnimal($id){
 	return $resposta;
 }
 
+function EncontrarAnimal($id){
+	
+	//Recupera conteudo recebido na request
+	$conteudo = file_get_contents("php://input");
+	$resposta = array();
+
+	//Verifica se o conteudo foi recebido
+	if(empty($conteudo)){
+		$resposta = mensagens(2);
+	}
+	else{
+		//Converte o json recebido pra array
+		$dados = json_decode($conteudo,true);
+		
+		//Verifica se as infromações esperadas foram recebidas
+		if(!isset($dados["Latitude"]) || !isset($dados["Longitude"]) || 
+		   !isset($dados["Local"]) || $id == 0)
+		{
+			$resposta = mensagens(3);
+		}
+		else{
+			include("conectar.php");
+			
+			//Evita SQL injection
+			$Latitude = mysqli_real_escape_string($conexao,$dados["Latitude"]);
+			$Longitude = mysqli_real_escape_string($conexao,$dados["Longitude"]);
+			$Local = mysqli_real_escape_string($conexao,$dados["Local"]);
+			
+			//Recupera idUsuario e nome do animal
+			$idUsuario = 0;
+			$nome = "";
+			$query = mysqli_query($conexao, "SELECT idUsuario, Nome FROM Animal WHERE idAnimal = "  .$id) or die(mysqli_error($conexao));
+			while($dados = mysqli_fetch_array($query)){
+				$idUsuario = $dados["idUsuario"];
+				$nome = $dados["Nome"];
+			}
+			
+			//Recupera último desaparecimento gerado
+			$idDesaparecimento = 0;
+			$query = mysqli_query($conexao, "SELECT idDesaparecimento FROM Desaparecimento WHERE idAnimal = " .$id ." ORDER BY idDesaparecimento DESC LIMIT 1") or die(mysqli_error($conexao));
+			while($dados = mysqli_fetch_array($query)){
+				$idDesaparecimento = $dados["idDesaparecimento"];
+			}
+			
+			//Recupera último idLocalizacao gerado
+			$idLocalizacao = 0;
+			$query = mysqli_query($conexao, "SELECT idLocalizacao FROM Localizacao ORDER BY idLocalizacao DESC LIMIT 1") or die(mysqli_error($conexao));
+			while($dados = mysqli_fetch_array($query)){
+				$idLocalizacao = $dados["idLocalizacao"];
+			}
+			$idLocalizacao++;
+			
+			//Recupera último idNotificacao gerado
+			$idNotificacao = 0;
+			$query = mysqli_query($conexao, "SELECT idNotificacao FROM Notificacao ORDER BY idNotificacao DESC LIMIT 1") or die(mysqli_error($conexao));
+			while($dados = mysqli_fetch_array($query)){
+				$idNotificacao = $dados["idNotificacao"];
+			}
+			$idNotificacao++;
+			
+			if($nome == ""){
+				$resposta = mensagens(19);
+			}else{
+				if($idDesaparecimento == 0){
+					$resposta = mensagens(17);
+				}else{
+					//Insere localização
+					$query = mysqli_query($conexao,"INSERT INTO Localizacao VALUES(" .$idLocalizacao .",'" .$Latitude ."','" .$Longitude ."'," .$idDesaparecimento .")") 
+					or die(mysqli_error($conexao));
+					
+					$Mensagem = "Seu pet " .$nome ." foi visto em " .$Local .". As coordenadas são latitude = " .$Latitude ." e longitude = " .$Longitude .".";
+					
+					//Insere notificação
+					$query = mysqli_query($conexao,"INSERT INTO Notificacao VALUES(" .$idNotificacao .",'" .$Mensagem ."'," .$idUsuario .")") 
+					or die(mysqli_error($conexao));
+					
+					$resposta = mensagens(18);
+				}
+			}
+		}
+	}
+
+	return $resposta;
+}
+
+function AtualizaQRCode($id){
+	
+	//Recupera conteudo recebido na request
+	$conteudo = file_get_contents("php://input");
+	$resposta = array();
+
+	//Verifica se o id foi recebido
+	if($id == 0){
+		$resposta = mensagens(9);
+	}
+	else{
+		//Verifica se o conteudo foi recebido
+		if(empty($conteudo)){
+			$resposta = mensagens(2);
+		}
+		else{
+			//Converte o json recebido pra array
+			$dados = json_decode($conteudo,true);
+			
+			//Verifica se as infromações esperadas foram recebidas
+			if(!isset($dados["QRCode"]))
+			{
+				$resposta = mensagens(3);
+			}
+			else
+			{
+				include("conectar.php");
+				include("uploadDeFotos.php");
+				
+				//Evita SQL injection
+				$QRCode = mysqli_real_escape_string($conexao,$dados["QRCode"]);
+				
+				$caminho = uploadDeQRCode($QRCode);
+				
+				//Atualiza animal no banco
+				$query = mysqli_query($conexao, "UPDATE Animal SET QRCode = '" .$caminho ."' WHERE idAnimal=" .$id) or die(mysqli_error($conexao));
+				$resposta = array("QRCode" => $caminho);
+			}
+		}
+	}
+
+	return $resposta;
+
+}
 ?>

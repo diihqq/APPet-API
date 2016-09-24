@@ -65,6 +65,18 @@ function mensagens($codigo){
 						"Codigo"=>16
 						,"Mensagem"=>"O campo Tipo deve ser passado!"
 					)
+					,array(
+						"Codigo"=>17
+						,"Mensagem"=>"Este animal não está perdido!"
+					)
+					,array(
+						"Codigo"=>18
+						,"Mensagem"=>"Notificação enviada ao dono do animal!"
+					)
+					,array(
+						"Codigo"=>19
+						,"Mensagem"=>"Animal não cadastrado!"
+					)
 				 );
 
 	$retorno = array();
