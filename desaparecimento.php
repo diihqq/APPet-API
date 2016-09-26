@@ -59,7 +59,7 @@ function InsereDesaparecimento(){
 			
 
 			//Recupera o próximo ID de Desaparecimento
-			$idDesaparecimento = 1;
+			$idDesaparecimento = 0;
 			$query = mysqli_query($conexao, "SELECT idDesaparecimento FROM Desaparecimento ORDER BY idDesaparecimento DESC LIMIT 1") or die(mysqli_error($conexao));
 			while($dados = mysqli_fetch_array($query)){
 				$idDesaparecimento = $dados["idDesaparecimento"];
@@ -67,7 +67,7 @@ function InsereDesaparecimento(){
 			$idDesaparecimento++;
 			
 			//Insere desaparecimento
-			$query = mysqli_query($conexao,"INSERT INTO Desaparecimento VALUES(" .$idDesaparecimento .",'" .$dataDesaparecimento ."','" .$idAnimal ."')") or die(mysqli_error($conexao));
+			$query = mysqli_query($conexao,"INSERT INTO Desaparecimento VALUES(" .$idDesaparecimento .",'" .$dataDesaparecimento ."'," .$idAnimal .")") or die(mysqli_error($conexao));
 			$resposta = mensagens(7);
 
 		}

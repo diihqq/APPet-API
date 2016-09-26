@@ -294,7 +294,7 @@ function AtualizaAnimal($id){
 			//Verifica se as infromações esperadas foram recebidas
 			if(!isset($dados["Nome"]) || !isset($dados["Genero"]) || 
 		   !isset($dados["Cor"]) || !isset($dados["Porte"]) || !isset($dados["Idade"]) ||
-		   !isset($dados["Caracteristicas"]) || !isset($dados["QRCode"]) || !isset($dados["Foto"]) || !isset($dados["Desaparecido"]) ||
+		   !isset($dados["Caracteristicas"]) || !isset($dados["Foto"]) || !isset($dados["Desaparecido"]) ||
 		   !isset($dados["idUsuario"]) || !isset($dados["idRaca"]))
 			{
 				$resposta = mensagens(3);
@@ -310,17 +310,27 @@ function AtualizaAnimal($id){
 				$Porte = mysqli_real_escape_string($conexao,$dados["Porte"]);
 				$Idade = mysqli_real_escape_string($conexao,$dados["Idade"]);
 				$Caracteristicas = mysqli_real_escape_string($conexao,$dados["Caracteristicas"]);
-				$QRCode = mysqli_real_escape_string($conexao,$dados["QRCode"]);
 				$Foto = mysqli_real_escape_string($conexao,$dados["Foto"]);
 				$Desaparecido = mysqli_real_escape_string($conexao,$dados["Desaparecido"]);
 				$idUsuario = mysqli_real_escape_string($conexao,$dados["idUsuario"]);
 				$idRaca = mysqli_real_escape_string($conexao,$dados["idRaca"]);
 				
+				$update = "UPDATE Animal SET Nome = '" .$Nome ."', Genero = '" .$Genero ."', Cor = '" .$Cor ."',
+				Porte = '" .$Porte ."', Idade = " .$Idade .", Caracteristicas = '" .$Caracteristicas ."', Desaparecido = " 
+				.$Desaparecido .", idUsuario = " .$idUsuario .", idRaca = " .$idRaca;
+				
+				if($Foto != ""){
+					//Faz upload da imagem
+					include("uploadDeFotos.php");
+					$caminhoFoto = uploadDeFotos($Foto);
+					
+					$update .= ", Foto = '" .$caminhoFoto ."'";
+				}
+				
+				$update .= " WHERE idAnimal=" .$id;
+
 				//Atualiza animal no banco
-				$query = mysqli_query($conexao, "UPDATE Animal SET Nome = '" .$Nome ."', Genero = '" .$Genero ."', Cor = '" .$Cor ."',
-				Porte = '" .$Porte ."', Idade = " .$Idade .", Caracteristicas = '" .$Caracteristicas ."', QRCode = '" .$QRCode ."', Foto = '" .$Foto 
-				."', Desaparecido = " .$Desaparecido .", idUsuario = " .$idUsuario .", idRaca = " .$idRaca ."  
-				WHERE idAnimal=" .$id) or die(mysqli_error($conexao));
+				$query = mysqli_query($conexao, $update) or die(mysqli_error($conexao));
 				$resposta = mensagens(10);
 			}
 		}
@@ -345,8 +355,36 @@ function ExcluiAnimal($id){
 		//Evita SQL injection		
 		$id = mysqli_real_escape_string($conexao,$id);
 		
-		//Consulta usuário no banco
-		$query = mysqli_query($conexao, "DELETE FROM Animal WHERE idAnimal=" .$id) or die(mysqli_error($conexao));
+		//Exclui fotos do animal
+		$query = mysqli_query($conexao, "DELETE FROM Foto WHERE idAnimal=" .$id) or die(mysqli_error($conexao));
+		
+		//Exclui localizações
+		$query = mysqli_query($conexao,"SELECT idDesaparecimento FROM Desaparecimento WHERE idAnimal = " .$id) or die(mysqli_error($conexao));
+		while($dados = mysqli_fetch_array($query))
+		{
+			$idDesaparecimento = $dados['idDesaparecimento'];
+			$query2 = mysqli_query($conexao, "DELETE FROM Localizacao WHERE idDesaparecimento=" .$idDesaparecimento) or die(mysqli_error($conexao));
+		}
+		
+		//Exclui desaparecimentos do animal
+		$query = mysqli_query($conexao, "DELETE FROM Desaparecimento WHERE idAnimal=" .$id) or die(mysqli_error($conexao));
+		
+		//Exclui eventos do animal
+		$query = mysqli_query($conexao,"SELECT idEvento FROM Evento WHERE idAnimal = " .$id) or die(mysqli_error($conexao));
+		while($dados = mysqli_fetch_array($query))
+		{
+			$idEvento = $dados['idEvento'];
+			$query2 = mysqli_query($conexao, "DELETE FROM Medicamento WHERE idEvento=" .$idEvento) or die(mysqli_error($conexao));
+			$query2 = mysqli_query($conexao, "DELETE FROM Vacina WHERE idEvento=" .$idEvento) or die(mysqli_error($conexao));
+			$query2 = mysqli_query($conexao, "DELETE FROM Compromisso WHERE idEvento=" .$idEvento) or die(mysqli_error($conexao));
+		}
+		
+		//Exclui eventos do animal
+		$query = mysqli_query($conexao, "DELETE FROM Evento WHERE idAnimal=" .$id) or die(mysqli_error($conexao));
+		
+		//Exclui animal
+		$query = mysqli_query($conexao, "DELETE FROM Animal WHERE idAnimal=" .$id) or die(mysqli_error($conexao));		
+		
 		$resposta = mensagens(11);
 	}
 
