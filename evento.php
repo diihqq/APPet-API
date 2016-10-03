@@ -286,7 +286,7 @@ function InsereEvento(){
 					$query2 = mysqli_query($conexao,"INSERT INTO ". $Tipo ." VALUES(" .$idEvento ."," .$Inicio ."," .$Fim ."," .$FrequenciaDiaria ."," .$HorasDeEspera .")") or die(mysqli_error($conexao));
 				}elseif($Tipo == "Compromisso"){
 					$query = mysqli_query($conexao,"INSERT INTO Evento VALUES(" .$idEvento.",'" .$Nome ."','" .$Observacoes ."'," .$FlagAlerta ."," .$idAlerta ."," .$idAnimal .",'" .$Tipo ."')") or die(mysqli_error($conexao));
-					$query2 = mysqli_query($conexao,"INSERT INTO ". $Tipo ." VALUES(" .$idEvento .",'" .$NomeLocal ."'," .$Latitude ."," .$Longitude ."," .$DataHora .")") or die(mysqli_error($conexao));
+					$query2 = mysqli_query($conexao,"INSERT INTO ". $Tipo ." VALUES(" .$idEvento .",'" .$NomeLocal ."','" .$Latitude ."','" .$Longitude ."'," .$DataHora .")") or die(mysqli_error($conexao));
 				}else{
 					$resposta = mensagens(16);
 				}
