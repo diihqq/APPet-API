@@ -422,10 +422,11 @@ function EncontrarAnimal($id){
 			//Recupera idUsuario e nome do animal
 			$idUsuario = 0;
 			$nome = "";
-			$query = mysqli_query($conexao, "SELECT idUsuario, Nome FROM Animal WHERE idAnimal = "  .$id) or die(mysqli_error($conexao));
+			$query = mysqli_query($conexao, "SELECT idUsuario, Nome, Desaparecido FROM Animal WHERE idAnimal = "  .$id) or die(mysqli_error($conexao));
 			while($dados = mysqli_fetch_array($query)){
 				$idUsuario = $dados["idUsuario"];
 				$nome = $dados["Nome"];
+				$desaparecido = $dados["Desaparecido"];
 			}
 			
 			//Recupera último desaparecimento gerado
@@ -454,7 +455,7 @@ function EncontrarAnimal($id){
 			if($nome == ""){
 				$resposta = mensagens(19);
 			}else{
-				if($idDesaparecimento == 0){
+				if($idDesaparecimento == 0 || $desaparecido == 0){
 					$resposta = mensagens(17);
 				}else{
 					//Insere localização
@@ -464,7 +465,7 @@ function EncontrarAnimal($id){
 					$Mensagem = "Seu pet " .$nome ." foi visto em " .$Local .". As coordenadas são latitude = " .$Latitude ." e longitude = " .$Longitude .".";
 					
 					//Insere notificação
-					$query = mysqli_query($conexao,"INSERT INTO Notificacao VALUES(" .$idNotificacao .",'" .$Mensagem ."'," .$idUsuario .")") 
+					$query = mysqli_query($conexao,"INSERT INTO Notificacao VALUES(" .$idNotificacao .",'" .$Mensagem ."'," .$idUsuario .",0,0)") 
 					or die(mysqli_error($conexao));
 					
 					$resposta = mensagens(18);

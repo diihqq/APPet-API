@@ -4,24 +4,40 @@ function ListaNotificacoesPorUsuario($id){
 	
 	$resposta = array();
 
-	$id = mysqli_real_escape_string($conexao,$id);
+	//Recupera conteudo recebido na request
+	$conteudo = file_get_contents("php://input");
 	
-	//Consulta foto no banco
-	if($id == 0){
-		$resposta = mensagens(14);
+	//Verifica se o conteudo foi recebido
+	if(empty($conteudo)){
+		$resposta = mensagens(2);
 	}else{
-		$query = mysqli_query($conexao,"SELECT N.idNotificacao, N.Mensagem, U.Nome, U.Email, U.Telefone, U.Cidade, U.Bairro FROM Notificacao as N INNER JOIN Usuario as U on N.idUsuario = U.idUsuario WHERE U.idUsuario = " .$id) or die(mysqli_error($conexao));
-	
-		//faz um looping e cria um array com os campos da consulta
-		while($dados = mysqli_fetch_array($query))
+		//Converte o json recebido pra array
+		$dados = json_decode($conteudo,true);
+		
+		//Verifica se as infromações esperadas foram recebidas
+		if(!isset($dados["Email"]))
 		{
-			$resposta[] = array('idNotificacao' => $dados['idNotificacao'],
-								'Mensagem' => $dados['Mensagem'],
-								'Nome' => $dados['Nome'],
-								'Email' => $dados['Email'],
-								'Telefone' => $dados['Telefone'],
-								'Cidade' => $dados['Cidade'],
-								'Bairro' => $dados['Bairro']);
+			$resposta = mensagens(3);
+		}else{
+			$email = mysqli_real_escape_string($conexao,$dados["Email"]);
+			
+			$query = mysqli_query($conexao,"SELECT N.idNotificacao, N.Mensagem, U.idUsuario, U.Nome, U.Email, U.Telefone, U.Cidade, U.Bairro, N.Notificada, N.Lida FROM Notificacao as N INNER JOIN Usuario as U on N.idUsuario = U.idUsuario WHERE U.Email = '" .$email ."'") or die(mysqli_error($conexao));
+		
+			//faz um looping e cria um array com os campos da consulta
+			while($dados = mysqli_fetch_array($query))
+			{
+				$resposta[] = array('idNotificacao' => $dados['idNotificacao'],
+									'Mensagem' => $dados['Mensagem'],
+									'idUsuario' => $dados['idUsuario'],
+									'Nome' => $dados['Nome'],
+									'Email' => $dados['Email'],
+									'Telefone' => $dados['Telefone'],
+									'Cidade' => $dados['Cidade'],
+									'Bairro' => $dados['Bairro'],
+									'Notificada' => $dados['Notificada'],
+									'Lida' => $dados['Lida']);
+			}
+			
 		}
 	}
 	return $resposta;
