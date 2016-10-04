@@ -43,6 +43,82 @@ function ListaNotificacoesPorUsuario($id){
 	return $resposta;
 }
 
+function LerNotificacoesPorUsuario($id){
+	include("conectar.php");
+	
+	$resposta = array();
+
+	//Recupera conteudo recebido na request
+	$conteudo = file_get_contents("php://input");
+	
+	//Verifica se o conteudo foi recebido
+	if(empty($conteudo)){
+		$resposta = mensagens(2);
+	}else{
+		//Converte o json recebido pra array
+		$dados = json_decode($conteudo,true);
+		
+		//Verifica se as infromações esperadas foram recebidas
+		if(!isset($dados["Email"]))
+		{
+			$resposta = mensagens(3);
+		}else{
+			$email = mysqli_real_escape_string($conexao,$dados["Email"]);
+			
+			$query = mysqli_query($conexao,"SELECT idUsuario FROM Usuario WHERE Email = '" .$email ."'") or die(mysqli_error($conexao));
+		
+			$idUsuario = 0;
+			//faz um looping e cria um array com os campos da consulta
+			while($dados = mysqli_fetch_array($query))
+			{
+				$idUsuario = $dados['idUsuario'];
+			}
+			
+			$query = mysqli_query($conexao,"UPDATE Notificacao SET Lida = 1 WHERE idUsuario = " .$idUsuario) or die(mysqli_error($conexao));	
+			$resposta = mensagens(10);
+		}
+	}
+	return $resposta;
+}
+
+function AlertarNotificacoesPorUsuario($id){
+	include("conectar.php");
+	
+	$resposta = array();
+
+	//Recupera conteudo recebido na request
+	$conteudo = file_get_contents("php://input");
+	
+	//Verifica se o conteudo foi recebido
+	if(empty($conteudo)){
+		$resposta = mensagens(2);
+	}else{
+		//Converte o json recebido pra array
+		$dados = json_decode($conteudo,true);
+		
+		//Verifica se as infromações esperadas foram recebidas
+		if(!isset($dados["Email"]))
+		{
+			$resposta = mensagens(3);
+		}else{
+			$email = mysqli_real_escape_string($conexao,$dados["Email"]);
+			
+			$query = mysqli_query($conexao,"SELECT idUsuario FROM Usuario WHERE Email = '" .$email ."'") or die(mysqli_error($conexao));
+		
+			$idUsuario = 0;
+			//faz um looping e cria um array com os campos da consulta
+			while($dados = mysqli_fetch_array($query))
+			{
+				$idUsuario = $dados['idUsuario'];
+			}
+			
+			$query = mysqli_query($conexao,"UPDATE Notificacao SET Notificada = 1 WHERE idUsuario = " .$idUsuario) or die(mysqli_error($conexao));	
+			$resposta = mensagens(10);
+		}
+	}
+	return $resposta;
+}
+
 function InsereNotificacao(){
 	
 	//Recupera conteudo recebido na request
