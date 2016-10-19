@@ -8,9 +8,9 @@ function ListaAnimais($id){
 	
 	//Consulta animal no banco
 	if($id == 0){
-		$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome , A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Foto, A.Desaparecido, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', R.Descricao as 'DescricaoRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro, E.idEspecie, E.Nome as 'NomeEspecie' FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca INNER JOIN Especie as E on E.idEspecie = R.idEspecie") or die(mysqli_error($conexao));
+		$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome , A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Foto, A.Desaparecido, A.FotoCarteira, A.DataFotoCarteira, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', R.Descricao as 'DescricaoRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro, E.idEspecie, E.Nome as 'NomeEspecie' FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca INNER JOIN Especie as E on E.idEspecie = R.idEspecie") or die(mysqli_error($conexao));
 	}else{
-		$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome , A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Foto, A.Desaparecido, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', R.Descricao as 'DescricaoRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro, E.idEspecie, E.Nome as 'NomeEspecie' FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca INNER JOIN Especie as E on E.idEspecie = R.idEspecie WHERE idAnimal = " .$id) or die(mysqli_error($conexao));
+		$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome , A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Foto, A.Desaparecido, A.FotoCarteira, A.DataFotoCarteira, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', R.Descricao as 'DescricaoRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro, E.idEspecie, E.Nome as 'NomeEspecie' FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca INNER JOIN Especie as E on E.idEspecie = R.idEspecie WHERE idAnimal = " .$id) or die(mysqli_error($conexao));
 	}
 	//faz um looping e cria um array com os campos da consulta
 	while($dados = mysqli_fetch_array($query))
@@ -25,6 +25,8 @@ function ListaAnimais($id){
 							'QRCode' => $dados['QRCode'],
 							'Foto' => $dados['Foto'],
 							'Desaparecido' => $dados['Desaparecido'],
+							'FotoCarteira' => $dados['FotoCarteira'],
+							'DataFotoCarteira' => $dados['DataFotoCarteira'],
 							'idUsuario' => $dados['idUsuario'],
 							'idRaca' => $dados['idRaca'],
 							'NomeRaca' => $dados['NomeRaca'],
@@ -49,9 +51,9 @@ function ListaAnimaisDesaparecidos($id){
 	
 	//Consulta animal no banco
 	if($id == 0){
-		$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome , A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Foto, A.Desaparecido, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', R.Descricao as 'DescricaoRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro, E.idEspecie, E.Nome as 'NomeEspecie' FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca INNER JOIN Especie as E on E.idEspecie = R.idEspecie WHERE A.Desaparecido = 1") or die(mysqli_error($conexao));
+		$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome , A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Foto, A.Desaparecido, A.FotoCarteira, A.DataFotoCarteira, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', R.Descricao as 'DescricaoRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro, E.idEspecie, E.Nome as 'NomeEspecie' FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca INNER JOIN Especie as E on E.idEspecie = R.idEspecie WHERE A.Desaparecido = 1") or die(mysqli_error($conexao));
 	}else{
-		$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome , A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Foto, A.Desaparecido, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', R.Descricao as 'DescricaoRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro, E.idEspecie, E.Nome as 'NomeEspecie' FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca INNER JOIN Especie as E on E.idEspecie = R.idEspecie WHERE A.idAnimal = " .$id . " and A.Desaparecido = 1") or die(mysqli_error($conexao));
+		$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome , A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Foto, A.Desaparecido, A.FotoCarteira, A.DataFotoCarteira, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', R.Descricao as 'DescricaoRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro, E.idEspecie, E.Nome as 'NomeEspecie' FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca INNER JOIN Especie as E on E.idEspecie = R.idEspecie WHERE A.idAnimal = " .$id . " and A.Desaparecido = 1") or die(mysqli_error($conexao));
 	}
 	//faz um looping e cria um array com os campos da consulta
 	while($dados = mysqli_fetch_array($query))
@@ -66,6 +68,8 @@ function ListaAnimaisDesaparecidos($id){
 							'QRCode' => $dados['QRCode'],
 							'Foto' => $dados['Foto'],
 							'Desaparecido' => $dados['Desaparecido'],
+							'FotoCarteira' => $dados['FotoCarteira'],
+							'DataFotoCarteira' => $dados['DataFotoCarteira'],
 							'idUsuario' => $dados['idUsuario'],
 							'idRaca' => $dados['idRaca'],
 							'NomeRaca' => $dados['NomeRaca'],
@@ -99,6 +103,7 @@ function InsereAnimal(){
 		if(!isset($dados["Nome"]) || !isset($dados["Genero"]) || 
 		   !isset($dados["Cor"]) || !isset($dados["Porte"]) || !isset($dados["Idade"]) ||
 		   !isset($dados["Caracteristicas"]) || !isset($dados["QRCode"]) || !isset($dados["Foto"]) || !isset($dados["Desaparecido"]) ||
+		   !isset($dados["FotoCarteira"]) || !isset($dados["DataFotoCarteira"]) ||
 		   !isset($dados["idUsuario"]) || !isset($dados["idRaca"]))
 		{
 			$resposta = mensagens(3);
@@ -117,12 +122,23 @@ function InsereAnimal(){
 			$QRCode = mysqli_real_escape_string($conexao,$dados["QRCode"]);
 			$Foto = mysqli_real_escape_string($conexao,$dados["Foto"]);
 			$Desaparecido = mysqli_real_escape_string($conexao,$dados["Desaparecido"]);
+			$FotoCarteira = mysqli_real_escape_string($conexao,$dados["FotoCarteira"]);
+			$DataFotoCarteira = mysqli_real_escape_string($conexao,$dados["DataFotoCarteira"]);
 			$idUsuario = mysqli_real_escape_string($conexao,$dados["idUsuario"]);
 			$idRaca = mysqli_real_escape_string($conexao,$dados["idRaca"]);
 			
 			//Faz upload da imagem
 			include("uploadDeFotos.php");
 			$caminhoFoto = uploadDeFotos($Foto);
+			
+			//Se não for nulo
+			if ($FotoCarteira != '')
+			{
+				//Faz upload da imagem
+				include("uploadDeFotos.php");
+				$caminhoFotoCarteira = uploadDeFotos($FotoCarteira);
+			}
+			
 			
 			//Recupera idAnimal para incrementar 1
 			$idAnimal = 1;
@@ -134,9 +150,9 @@ function InsereAnimal(){
 			
 			//Insere animal
 			$query = mysqli_query($conexao,"INSERT INTO Animal VALUES(" .$idAnimal .",'" .$Nome ."','" .$Genero ."','" .$Cor ."',
-			'" .$Porte ."'," .$Idade .",'" .$Caracteristicas ."','" .$QRCode ."','" .$caminhoFoto ."'," .$Desaparecido ."," .$idUsuario ."," .$idRaca .")") 
+			'" .$Porte ."'," .$Idade .",'" .$Caracteristicas ."','" .$QRCode ."','" .$caminhoFoto ."'," .$Desaparecido .",'" .$caminhoFotoCarteira ."','" .$DataFotoCarteira ."'," .$idUsuario ."," .$idRaca .")") 
 			or die(mysqli_error($conexao));
-			
+
 			$resposta = mensagens(7);
 		}
 	}
@@ -171,7 +187,7 @@ function RecuperaAnimal($id){
 			$idUsuario = mysqli_real_escape_string($conexao,$dados["idUsuario"]);
 			
 			//Consulta animal + dono no banco
-			$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome, A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Foto, A.Desaparecido, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', R.Descricao as 'DescricaoRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro, E.idEspecie, E.Nome as 'NomeEspecie' FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca INNER JOIN Especie as E on E.idEspecie = R.idEspecie WHERE A.Nome='" .$Nome ."' and A.idUsuario=" .$idUsuario ."") or die(mysqli_error($conexao));
+			$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome, A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Foto, A.Desaparecido, A.FotoCarteira, A.DataFotoCarteira, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', R.Descricao as 'DescricaoRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro, E.idEspecie, E.Nome as 'NomeEspecie' FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca INNER JOIN Especie as E on E.idEspecie = R.idEspecie WHERE A.Nome='" .$Nome ."' and A.idUsuario=" .$idUsuario ."") or die(mysqli_error($conexao));
 			
 			
 			//Verifica se foi retornado algum registro
@@ -187,6 +203,8 @@ function RecuperaAnimal($id){
 							'QRCode' => $dados['QRCode'],
 							'Foto' => $dados['Foto'],
 							'Desaparecido' => $dados['Desaparecido'],
+							'FotoCarteira' => $dados['FotoCarteira'],
+							'DataFotoCarteira' => $dados['DataFotoCarteira'],
 							'idUsuario' => $dados['idUsuario'],
 							'idRaca' => $dados['idRaca'],
 							'NomeRaca' => $dados['NomeRaca'],
@@ -238,7 +256,7 @@ function ListaAnimaisDoUsuario($id){
 			$email = mysqli_real_escape_string($conexao,$dados["Email"]);
 			
 			//Consulta animal + dono no banco
-			$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome, A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Foto, A.Desaparecido, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', R.Descricao as 'DescricaoRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro, E.idEspecie, E.Nome as 'NomeEspecie' FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca INNER JOIN Especie as E on E.idEspecie = R.idEspecie WHERE U.Email='" .$email ."'") or die(mysqli_error($conexao));
+			$query = mysqli_query($conexao,"SELECT A.idAnimal, A.Nome, A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Foto, A.Desaparecido, A.FotoCarteira, A.DataFotoCarteira, A.idUsuario, A.idRaca, R.Nome as 'NomeRaca', R.Descricao as 'DescricaoRaca', U.Nome as 'NomeUsuario', U.Email, U.Telefone, U.Cidade, U.Bairro, E.idEspecie, E.Nome as 'NomeEspecie' FROM Animal as A INNER JOIN Usuario as U on A.idUsuario = U.idUsuario INNER JOIN Raca as R on A.idRaca = R.idRaca INNER JOIN Especie as E on E.idEspecie = R.idEspecie WHERE U.Email='" .$email ."'") or die(mysqli_error($conexao));
 			
 			
 			//Verifica se foi retornado algum registro
@@ -254,6 +272,8 @@ function ListaAnimaisDoUsuario($id){
 							'QRCode' => $dados['QRCode'],
 							'Foto' => $dados['Foto'],
 							'Desaparecido' => $dados['Desaparecido'],
+							'FotoCarteira' => $dados['FotoCarteira'],
+							'DataFotoCarteira' => $dados['DataFotoCarteira'],
 							'idUsuario' => $dados['idUsuario'],
 							'idRaca' => $dados['idRaca'],
 							'NomeRaca' => $dados['NomeRaca'],
@@ -295,6 +315,7 @@ function AtualizaAnimal($id){
 			if(!isset($dados["Nome"]) || !isset($dados["Genero"]) || 
 		   !isset($dados["Cor"]) || !isset($dados["Porte"]) || !isset($dados["Idade"]) ||
 		   !isset($dados["Caracteristicas"]) || !isset($dados["Foto"]) || !isset($dados["Desaparecido"]) ||
+		   !isset($dados["FotoCarteira"]) || !isset($dados["DataFotoCarteira"]) ||
 		   !isset($dados["idUsuario"]) || !isset($dados["idRaca"]))
 			{
 				$resposta = mensagens(3);
@@ -312,6 +333,8 @@ function AtualizaAnimal($id){
 				$Caracteristicas = mysqli_real_escape_string($conexao,$dados["Caracteristicas"]);
 				$Foto = mysqli_real_escape_string($conexao,$dados["Foto"]);
 				$Desaparecido = mysqli_real_escape_string($conexao,$dados["Desaparecido"]);
+				$FotoCarteira = mysqli_real_escape_string($conexao,$dados["FotoCarteira"]);
+				$DataFotoCarteira = mysqli_real_escape_string($conexao,$dados["DataFotoCarteira"]);
 				$idUsuario = mysqli_real_escape_string($conexao,$dados["idUsuario"]);
 				$idRaca = mysqli_real_escape_string($conexao,$dados["idRaca"]);
 				
@@ -325,6 +348,14 @@ function AtualizaAnimal($id){
 					$caminhoFoto = uploadDeFotos($Foto);
 					
 					$update .= ", Foto = '" .$caminhoFoto ."'";
+				}
+				
+				if($FotoCarteira != ""){
+					//Faz upload da imagem
+					include("uploadDeFotos.php");
+					$caminhoFotoCarteira = uploadDeFotos($FotoCarteira);
+					
+					$update .= ", FotoCarteira = '" .$caminhoFotoCarteira ."'";
 				}
 				
 				$update .= " WHERE idAnimal=" .$id;

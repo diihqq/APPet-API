@@ -43,96 +43,126 @@ function ListaEventos($id){
 }
 
 function ListaEventosPorUsuario($id){
-	include("conectar.php");
 	
+	//Recupera conteudo recebido na request	
+	$conteudo = file_get_contents("php://input");
 	$resposta = array();
 
-	$id = mysqli_real_escape_string($conexao,$id);
-	
-	//Consulta evento no banco
-	if($id == 0){
-		$resposta = mensagens(9);
-	}else{
-		$query = mysqli_query($conexao,"SELECT E.idEvento, E.Nome, E.Observacoes, E.FlagAlerta, E.idAlerta, A.NivelAlerta, A.Frequencia as 'FrequenciaAlerta', E.idAnimal, E.Tipo, AN.Nome as 'NomeAnimal', AN.Genero, AN.Cor, AN.Cor, AN.Porte, AN.Idade, AN.Caracteristicas, AN.QRCode, AN.Desaparecido, AN.idUsuario, AN.idRaca,  M.Inicio, M.Fim, M.FrequenciaDiaria, M.HorasDeEspera, V.Aplicada, V.DataAplicacao, V.DataValidade, V.FrequenciaAnual, V.QtdDoses, C.NomeLocal, C.Latitude, C.Longitude, C.DataHora FROM Evento as E LEFT JOIN Medicamento as M on E.idEvento = M.idEvento LEFT JOIN Vacina as V on E.idEvento = V.idEvento LEFT JOIN Compromisso as C on E.idEvento = C.idEvento LEFT JOIN Alerta as A on E.idAlerta = A.idAlerta LEFT JOIN Animal as AN on E.idAnimal = AN.idAnimal WHERE AN.idUsuario = ".$id ." ORDER BY E.idEvento") or die(mysqli_error($conexao));
+	//Verifica se o conteudo foi recebido
+	if(empty($conteudo)){
+		$resposta = mensagens(2);
 	}
-	//faz um looping e cria um array com os campos da consulta
-	while($dados = mysqli_fetch_array($query))
-	{
-		$resposta[] = array('idEvento' => $dados['idEvento'],
-							'Nome' => $dados['Nome'],
-							'Observacoes' => $dados['Observacoes'],
-							'FlagAlerta' => $dados['FlagAlerta'],
-							'idAlerta' => $dados['idAlerta'],
-							'NivelAlerta' => $dados['NivelAlerta'],
-							'FrequenciaAlerta' => $dados['FrequenciaAlerta'],
-							'idAnimal' => $dados['idAnimal'],
-							'Tipo' => $dados['Tipo'],
-							'NomeAnimal' => $dados['NomeAnimal'],
-							'Genero' => $dados['Genero'],
-							'Cor' => $dados['Cor'],
-							'Porte' => $dados['Porte'],
-							'Idade' => $dados['Idade'],
-							'Caracteristicas' => $dados['Caracteristicas'],
-							'QRCode' => $dados['QRCode'],
-							'Desaparecido' => $dados['Desaparecido'],
-							'idUsuario' => $dados['idUsuario'],
-							'idRaca' => $dados['idRaca'],
-							'Inicio' => $dados['Inicio'],
-							'Fim' => $dados['Fim'],
-							'FrequenciaDiaria' => $dados['FrequenciaDiaria'],
-							'HorasDeEspera' => $dados['HorasDeEspera'],
-							'Aplicada' => $dados['Aplicada'],
-							'DataAplicacao' => $dados['DataAplicacao'],
-							'DataValidade' => $dados['DataValidade'],
-							'FrequenciaAnual' => $dados['FrequenciaAnual'],
-							'QtdDoses' => $dados['QtdDoses'],
-							'NomeLocal' => $dados['NomeLocal'],
-							'Latitude' => $dados['Latitude'],
-							'Longitude' => $dados['Longitude'],
-							'DataHora' => $dados['DataHora']);
+	else{
+		//Converte o json recebido pra array
+		$dados = json_decode($conteudo,true);
+		
+		//Verifica se as informações esperadas foram recebidas
+		if(!isset($dados["idUsuario"])){
+			$resposta = mensagens(3);
+		}
+		else{
+			include("conectar.php");
+			
+			//Evita SQL injection
+			$idUsuario = mysqli_real_escape_string($conexao,$dados["idUsuario"]);
+	
+			$query = mysqli_query($conexao,"SELECT E.idEvento, E.Nome, E.Observacoes, E.FlagAlerta, E.idAlerta, A.NivelAlerta, A.Frequencia as 'FrequenciaAlerta', E.idAnimal, E.Tipo, AN.Nome as 'NomeAnimal', AN.Genero, AN.Cor, AN.Cor, AN.Porte, AN.Idade, AN.Caracteristicas, AN.QRCode, AN.Desaparecido, AN.idUsuario, AN.idRaca,  M.Inicio, M.Fim, M.FrequenciaDiaria, M.HorasDeEspera, V.Aplicada, V.DataAplicacao, V.DataValidade, V.FrequenciaAnual, V.QtdDoses, C.NomeLocal, C.Latitude, C.Longitude, C.DataHora FROM Evento as E LEFT JOIN Medicamento as M on E.idEvento = M.idEvento LEFT JOIN Vacina as V on E.idEvento = V.idEvento LEFT JOIN Compromisso as C on E.idEvento = C.idEvento LEFT JOIN Alerta as A on E.idAlerta = A.idAlerta LEFT JOIN Animal as AN on E.idAnimal = AN.idAnimal WHERE AN.idUsuario = ".$idUsuario ." ORDER BY E.idEvento") or die(mysqli_error($conexao));
+		
+			//faz um looping e cria um array com os campos da consulta
+			while($dados = mysqli_fetch_array($query))
+			{
+				$resposta[] = array('idEvento' => $dados['idEvento'],
+									'Nome' => $dados['Nome'],
+									'Observacoes' => $dados['Observacoes'],
+									'FlagAlerta' => $dados['FlagAlerta'],
+									'idAlerta' => $dados['idAlerta'],
+									'NivelAlerta' => $dados['NivelAlerta'],
+									'FrequenciaAlerta' => $dados['FrequenciaAlerta'],
+									'idAnimal' => $dados['idAnimal'],
+									'Tipo' => $dados['Tipo'],
+									'NomeAnimal' => $dados['NomeAnimal'],
+									'Genero' => $dados['Genero'],
+									'Cor' => $dados['Cor'],
+									'Porte' => $dados['Porte'],
+									'Idade' => $dados['Idade'],
+									'Caracteristicas' => $dados['Caracteristicas'],
+									'QRCode' => $dados['QRCode'],
+									'Desaparecido' => $dados['Desaparecido'],
+									'idUsuario' => $dados['idUsuario'],
+									'idRaca' => $dados['idRaca'],
+									'Inicio' => $dados['Inicio'],
+									'Fim' => $dados['Fim'],
+									'FrequenciaDiaria' => $dados['FrequenciaDiaria'],
+									'HorasDeEspera' => $dados['HorasDeEspera'],
+									'Aplicada' => $dados['Aplicada'],
+									'DataAplicacao' => $dados['DataAplicacao'],
+									'DataValidade' => $dados['DataValidade'],
+									'FrequenciaAnual' => $dados['FrequenciaAnual'],
+									'QtdDoses' => $dados['QtdDoses'],
+									'NomeLocal' => $dados['NomeLocal'],
+									'Latitude' => $dados['Latitude'],
+									'Longitude' => $dados['Longitude'],
+									'DataHora' => $dados['DataHora']);
+			}
+		}
 	}
 	
 	return $resposta;
 }
 
 function ListaEventosPorAnimal($id){
-	include("conectar.php");
 	
+	//Recupera conteudo recebido na request	
+	$conteudo = file_get_contents("php://input");
 	$resposta = array();
 
-	$id = mysqli_real_escape_string($conexao,$id);
-	
-	//Consulta evento no banco
-	if($id == 0){
-		$resposta = mensagens(9);
-	}else{
-		$query = mysqli_query($conexao,"SELECT E.idEvento, E.Nome, E.Observacoes, E.FlagAlerta, E.idAlerta, A.NivelAlerta, A.Frequencia as 'FrequenciaAlerta', E.idAnimal, E.Tipo, M.Inicio, M.Fim, M.FrequenciaDiaria, M.HorasDeEspera, V.Aplicada, V.DataAplicacao, V.DataValidade, V.FrequenciaAnual, V.QtdDoses, C.NomeLocal, C.Latitude, C.Longitude, C.DataHora FROM Evento as E LEFT JOIN Medicamento as M on E.idEvento = M.idEvento LEFT JOIN Vacina as V on E.idEvento = V.idEvento LEFT JOIN Compromisso as C on E.idEvento = C.idEvento LEFT JOIN Alerta as A on E.idAlerta = A.idAlerta WHERE E.idAnimal = ".$id ." ORDER BY E.idEvento") or die(mysqli_error($conexao));
+	//Verifica se o conteudo foi recebido
+	if(empty($conteudo)){
+		$resposta = mensagens(2);
 	}
-	//faz um looping e cria um array com os campos da consulta
-	while($dados = mysqli_fetch_array($query))
-	{
-		$resposta[] = array('idEvento' => $dados['idEvento'],
-							'Nome' => $dados['Nome'],
-							'Observacoes' => $dados['Observacoes'],
-							'FlagAlerta' => $dados['FlagAlerta'],
-							'idAlerta' => $dados['idAlerta'],
-							'NivelAlerta' => $dados['NivelAlerta'],
-							'FrequenciaAlerta' => $dados['FrequenciaAlerta'],
-							'idAnimal' => $dados['idAnimal'],
-							'Tipo' => $dados['Tipo'],
-							'Inicio' => $dados['Inicio'],
-							'Fim' => $dados['Fim'],
-							'FrequenciaDiaria' => $dados['FrequenciaDiaria'],
-							'HorasDeEspera' => $dados['HorasDeEspera'],
-							'Aplicada' => $dados['Aplicada'],
-							'DataAplicacao' => $dados['DataAplicacao'],
-							'DataValidade' => $dados['DataValidade'],
-							'FrequenciaAnual' => $dados['FrequenciaAnual'],
-							'QtdDoses' => $dados['QtdDoses'],
-							'NomeLocal' => $dados['NomeLocal'],
-							'Latitude' => $dados['Latitude'],
-							'Longitude' => $dados['Longitude'],
-							'DataHora' => $dados['DataHora']);
+	else{
+		//Converte o json recebido pra array
+		$dados = json_decode($conteudo,true);
+		
+		//Verifica se as informações esperadas foram recebidas
+		if(!isset($dados["idAnimal"])){
+			$resposta = mensagens(3);
+		}
+		else{
+			include("conectar.php");
+			
+			//Evita SQL injection
+			$idAnimal = mysqli_real_escape_string($conexao,$dados["idAnimal"]);
+	
+			$query = mysqli_query($conexao,"SELECT E.idEvento, E.Nome, E.Observacoes, E.FlagAlerta, E.idAlerta, A.NivelAlerta, A.Frequencia as 'FrequenciaAlerta', E.idAnimal, E.Tipo, M.Inicio, M.Fim, M.FrequenciaDiaria, M.HorasDeEspera, V.Aplicada, V.DataAplicacao, V.DataValidade, V.FrequenciaAnual, V.QtdDoses, C.NomeLocal, C.Latitude, C.Longitude, C.DataHora FROM Evento as E LEFT JOIN Medicamento as M on E.idEvento = M.idEvento LEFT JOIN Vacina as V on E.idEvento = V.idEvento LEFT JOIN Compromisso as C on E.idEvento = C.idEvento LEFT JOIN Alerta as A on E.idAlerta = A.idAlerta WHERE E.idAnimal = ".$idAnimal ." ORDER BY E.idEvento") or die(mysqli_error($conexao));
+	
+			//faz um looping e cria um array com os campos da consulta
+			while($dados = mysqli_fetch_array($query))
+			{
+				$resposta[] = array('idEvento' => $dados['idEvento'],
+									'Nome' => utf8_encode($dados['Nome']),
+									'Observacoes' => utf8_encode($dados['Observacoes']),
+									'FlagAlerta' => $dados['FlagAlerta'],
+									'idAlerta' => $dados['idAlerta'],
+									'NivelAlerta' => utf8_encode($dados['NivelAlerta']),
+									'FrequenciaAlerta' => $dados['FrequenciaAlerta'],
+									'idAnimal' => $dados['idAnimal'],
+									'Tipo' => utf8_encode($dados['Tipo']),
+									'Inicio' => $dados['Inicio'],
+									'Fim' => $dados['Fim'],
+									'FrequenciaDiaria' => $dados['FrequenciaDiaria'],
+									'HorasDeEspera' => $dados['HorasDeEspera'],
+									'Aplicada' => $dados['Aplicada'],
+									'DataAplicacao' => $dados['DataAplicacao'],
+									'DataValidade' => $dados['DataValidade'],
+									'FrequenciaAnual' => $dados['FrequenciaAnual'],
+									'QtdDoses' => $dados['QtdDoses'],
+									'NomeLocal' => utf8_encode($dados['NomeLocal']),
+									'Latitude' => utf8_encode($dados['Latitude']),
+									'Longitude' => utf8_encode($dados['Longitude']),
+									'DataHora' => $dados['DataHora']);
+			}
+		}
 	}
 	
 	return $resposta;
@@ -280,13 +310,13 @@ function InsereEvento(){
 				//Insere evento
 				if($Tipo == "Vacina"){
 					$query = mysqli_query($conexao,"INSERT INTO Evento VALUES(" .$idEvento.",'" .$Nome ."','" .$Observacoes ."'," .$FlagAlerta ."," .$idAlerta ."," .$idAnimal .",'" .$Tipo ."')") or die(mysqli_error($conexao));
-					$query2 = mysqli_query($conexao,"INSERT INTO ". $Tipo ." VALUES(" .$idEvento ."," .$Aplicada ."," .$DataAplicacao ."," .$DataValidade ."," .$FrequenciaAnual ."," .$QtdDoses .")") or die(mysqli_error($conexao));
+					$query2 = mysqli_query($conexao,"INSERT INTO ". $Tipo ." VALUES(" .$idEvento ."," .$Aplicada .",'" .$DataAplicacao ."','" .$DataValidade ."'," .$FrequenciaAnual ."," .$QtdDoses .")") or die(mysqli_error($conexao));
 				}elseif($Tipo == "Medicamento"){
 					$query = mysqli_query($conexao,"INSERT INTO Evento VALUES(" .$idEvento.",'" .$Nome ."','" .$Observacoes ."'," .$FlagAlerta ."," .$idAlerta ."," .$idAnimal .",'" .$Tipo ."')") or die(mysqli_error($conexao));
-					$query2 = mysqli_query($conexao,"INSERT INTO ". $Tipo ." VALUES(" .$idEvento ."," .$Inicio ."," .$Fim ."," .$FrequenciaDiaria ."," .$HorasDeEspera .")") or die(mysqli_error($conexao));
+					$query2 = mysqli_query($conexao,"INSERT INTO ". $Tipo ." VALUES(" .$idEvento .",'" .$Inicio ."','" .$Fim ."'," .$FrequenciaDiaria ."," .$HorasDeEspera .")") or die(mysqli_error($conexao));
 				}elseif($Tipo == "Compromisso"){
 					$query = mysqli_query($conexao,"INSERT INTO Evento VALUES(" .$idEvento.",'" .$Nome ."','" .$Observacoes ."'," .$FlagAlerta ."," .$idAlerta ."," .$idAnimal .",'" .$Tipo ."')") or die(mysqli_error($conexao));
-					$query2 = mysqli_query($conexao,"INSERT INTO ". $Tipo ." VALUES(" .$idEvento .",'" .$NomeLocal ."','" .$Latitude ."','" .$Longitude ."'," .$DataHora .")") or die(mysqli_error($conexao));
+					$query2 = mysqli_query($conexao,"INSERT INTO ". $Tipo ." VALUES(" .$idEvento .",'" .$NomeLocal ."','" .$Latitude ."','" .$Longitude ."','" .$DataHora ."')") or die(mysqli_error($conexao));
 				}else{
 					$resposta = mensagens(16);
 				}

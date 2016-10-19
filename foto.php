@@ -8,9 +8,9 @@ function ListaFotosPorAnimal($id){
 	
 	//Consulta foto no banco
 	if($id == 0){
-		$query = mysqli_query($conexao,"SELECT F.idFoto, F.Caminho, F.idAnimal, A.Nome , A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Desaparecido, A.idUsuario, A.idRaca FROM Foto as F INNER JOIN Animal as A on F.idAnimal = A.idAnimal") or die(mysqli_error($conexao));
+		$query = mysqli_query($conexao,"SELECT F.idFoto, F.Caminho, F.idAnimal, A.Nome , A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Desaparecido, A.FotoCarteira, A.DataFotoCarteira, A.idUsuario, A.idRaca FROM Foto as F INNER JOIN Animal as A on F.idAnimal = A.idAnimal") or die(mysqli_error($conexao));
 	}else{
-		$query = mysqli_query($conexao,"SELECT F.idFoto, F.Caminho, F.idAnimal, A.Nome , A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Desaparecido, A.idUsuario, A.idRaca FROM Foto as F INNER JOIN Animal as A on F.idAnimal = A.idAnimal WHERE F.idAnimal = " .$id) or die(mysqli_error($conexao));
+		$query = mysqli_query($conexao,"SELECT F.idFoto, F.Caminho, F.idAnimal, A.Nome , A.Genero, A.Cor, A.Porte, A.Idade, A.Caracteristicas, A.QRCode, A.Desaparecido, A.FotoCarteira, A.DataFotoCarteira, A.idUsuario, A.idRaca FROM Foto as F INNER JOIN Animal as A on F.idAnimal = A.idAnimal WHERE F.idAnimal = " .$id) or die(mysqli_error($conexao));
 	}
 	//faz um looping e cria um array com os campos da consulta
 	while($dados = mysqli_fetch_array($query))
@@ -26,6 +26,8 @@ function ListaFotosPorAnimal($id){
 							'Caracteristicas' => $dados['Caracteristicas'],
 							'QRCode' => $dados['QRCode'],
 							'Desaparecido' => $dados['Desaparecido'],
+							'FotoCarteira' => $dados['FotoCarteira'],
+							'DataFotoCarteira' => $dados['DataFotoCarteira'],
 							'idUsuario' => $dados['idUsuario'],
 							'idRaca' => $dados['idRaca']);
 	}
