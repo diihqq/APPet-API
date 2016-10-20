@@ -57,16 +57,16 @@ function ListaEventosPorUsuario($id){
 		$dados = json_decode($conteudo,true);
 		
 		//Verifica se as informações esperadas foram recebidas
-		if(!isset($dados["idUsuario"])){
+		if(!isset($dados["Email"])){
 			$resposta = mensagens(3);
 		}
 		else{
 			include("conectar.php");
 			
 			//Evita SQL injection
-			$idUsuario = mysqli_real_escape_string($conexao,$dados["idUsuario"]);
+			$email = mysqli_real_escape_string($conexao,$dados["Email"]);
 	
-			$query = mysqli_query($conexao,"SELECT E.idEvento, E.Nome, E.Observacoes, E.FlagAlerta, E.idAlerta, A.NivelAlerta, A.Frequencia as 'FrequenciaAlerta', E.idAnimal, E.Tipo, AN.Nome as 'NomeAnimal', AN.Genero, AN.Cor, AN.Cor, AN.Porte, AN.Idade, AN.Caracteristicas, AN.QRCode, AN.Desaparecido, AN.idUsuario, AN.idRaca,  M.Inicio, M.Fim, M.FrequenciaDiaria, M.HorasDeEspera, V.Aplicada, V.DataAplicacao, V.DataValidade, V.FrequenciaAnual, V.QtdDoses, C.NomeLocal, C.Latitude, C.Longitude, C.DataHora FROM Evento as E LEFT JOIN Medicamento as M on E.idEvento = M.idEvento LEFT JOIN Vacina as V on E.idEvento = V.idEvento LEFT JOIN Compromisso as C on E.idEvento = C.idEvento LEFT JOIN Alerta as A on E.idAlerta = A.idAlerta LEFT JOIN Animal as AN on E.idAnimal = AN.idAnimal WHERE AN.idUsuario = ".$idUsuario ." ORDER BY E.idEvento") or die(mysqli_error($conexao));
+			$query = mysqli_query($conexao,"SELECT E.idEvento, E.Nome, E.Observacoes, E.FlagAlerta, E.idAlerta, A.NivelAlerta, A.Frequencia as 'FrequenciaAlerta', E.idAnimal, E.Tipo, AN.Nome as 'NomeAnimal', AN.Genero, AN.Cor, AN.Porte, AN.Idade, AN.Caracteristicas, AN.QRCode, AN.Foto, AN.Desaparecido, AN.FotoCarteira, AN.DataFotoCarteira, AN.idUsuario, AN.idRaca,  M.Inicio, M.Fim, M.FrequenciaDiaria, M.HorasDeEspera, V.Aplicada, V.DataAplicacao, V.DataValidade, V.FrequenciaAnual, V.QtdDoses, C.NomeLocal, C.Latitude, C.Longitude, C.DataHora FROM Evento as E LEFT JOIN Medicamento as M on E.idEvento = M.idEvento LEFT JOIN Vacina as V on E.idEvento = V.idEvento LEFT JOIN Compromisso as C on E.idEvento = C.idEvento LEFT JOIN Alerta as A on E.idAlerta = A.idAlerta LEFT JOIN Animal as AN on E.idAnimal = AN.idAnimal INNER JOIN Usuario as U on AN.idUsuario = U.idUsuario WHERE U.Email='" .$email ."' ORDER BY AN.Nome, E.Tipo") or die(mysqli_error($conexao));
 		
 			//faz um looping e cria um array com os campos da consulta
 			while($dados = mysqli_fetch_array($query))
@@ -87,7 +87,10 @@ function ListaEventosPorUsuario($id){
 									'Idade' => $dados['Idade'],
 									'Caracteristicas' => $dados['Caracteristicas'],
 									'QRCode' => $dados['QRCode'],
+									'Foto' => $dados['Foto'],
 									'Desaparecido' => $dados['Desaparecido'],
+									'FotoCarteira' => $dados['FotoCarteira'],
+									'DataFotoCarteira' => $dados['DataFotoCarteira'],
 									'idUsuario' => $dados['idUsuario'],
 									'idRaca' => $dados['idRaca'],
 									'Inicio' => $dados['Inicio'],
@@ -134,20 +137,20 @@ function ListaEventosPorAnimal($id){
 			//Evita SQL injection
 			$idAnimal = mysqli_real_escape_string($conexao,$dados["idAnimal"]);
 	
-			$query = mysqli_query($conexao,"SELECT E.idEvento, E.Nome, E.Observacoes, E.FlagAlerta, E.idAlerta, A.NivelAlerta, A.Frequencia as 'FrequenciaAlerta', E.idAnimal, E.Tipo, M.Inicio, M.Fim, M.FrequenciaDiaria, M.HorasDeEspera, V.Aplicada, V.DataAplicacao, V.DataValidade, V.FrequenciaAnual, V.QtdDoses, C.NomeLocal, C.Latitude, C.Longitude, C.DataHora FROM Evento as E LEFT JOIN Medicamento as M on E.idEvento = M.idEvento LEFT JOIN Vacina as V on E.idEvento = V.idEvento LEFT JOIN Compromisso as C on E.idEvento = C.idEvento LEFT JOIN Alerta as A on E.idAlerta = A.idAlerta WHERE E.idAnimal = ".$idAnimal ." ORDER BY E.idEvento") or die(mysqli_error($conexao));
+			$query = mysqli_query($conexao,"SELECT E.idEvento, E.Nome, E.Observacoes, E.FlagAlerta, E.idAlerta, A.NivelAlerta, A.Frequencia as 'FrequenciaAlerta', E.idAnimal, E.Tipo, M.Inicio, M.Fim, M.FrequenciaDiaria, M.HorasDeEspera, V.Aplicada, V.DataAplicacao, V.DataValidade, V.FrequenciaAnual, V.QtdDoses, C.NomeLocal, C.Latitude, C.Longitude, C.DataHora FROM Evento as E LEFT JOIN Medicamento as M on E.idEvento = M.idEvento LEFT JOIN Vacina as V on E.idEvento = V.idEvento LEFT JOIN Compromisso as C on E.idEvento = C.idEvento LEFT JOIN Alerta as A on E.idAlerta = A.idAlerta WHERE E.idAnimal = ".$idAnimal ." ORDER BY E.Tipo, E.Nome") or die(mysqli_error($conexao));
 	
 			//faz um looping e cria um array com os campos da consulta
 			while($dados = mysqli_fetch_array($query))
 			{
 				$resposta[] = array('idEvento' => $dados['idEvento'],
-									'Nome' => utf8_encode($dados['Nome']),
-									'Observacoes' => utf8_encode($dados['Observacoes']),
+									'Nome' => $dados['Nome'],
+									'Observacoes' => $dados['Observacoes'],
 									'FlagAlerta' => $dados['FlagAlerta'],
 									'idAlerta' => $dados['idAlerta'],
-									'NivelAlerta' => utf8_encode($dados['NivelAlerta']),
+									'NivelAlerta' => $dados['NivelAlerta'],
 									'FrequenciaAlerta' => $dados['FrequenciaAlerta'],
 									'idAnimal' => $dados['idAnimal'],
-									'Tipo' => utf8_encode($dados['Tipo']),
+									'Tipo' => $dados['Tipo'],
 									'Inicio' => $dados['Inicio'],
 									'Fim' => $dados['Fim'],
 									'FrequenciaDiaria' => $dados['FrequenciaDiaria'],
@@ -157,9 +160,9 @@ function ListaEventosPorAnimal($id){
 									'DataValidade' => $dados['DataValidade'],
 									'FrequenciaAnual' => $dados['FrequenciaAnual'],
 									'QtdDoses' => $dados['QtdDoses'],
-									'NomeLocal' => utf8_encode($dados['NomeLocal']),
-									'Latitude' => utf8_encode($dados['Latitude']),
-									'Longitude' => utf8_encode($dados['Longitude']),
+									'NomeLocal' => $dados['NomeLocal'],
+									'Latitude' => $dados['Latitude'],
+									'Longitude' => $dados['Longitude'],
 									'DataHora' => $dados['DataHora']);
 			}
 		}
@@ -285,16 +288,18 @@ function InsereEvento(){
 				$DataHora = mysqli_real_escape_string($conexao,$dados["DataHora"]);
 			}
 			
-						
+			//Diogo - 20/10/2016			
 			//Consulta evento no banco
-			$query = mysqli_query($conexao,"SELECT idEvento FROM Evento WHERE Nome='" .$Nome ."'") or die(mysqli_error($conexao));
+			/*$query = mysqli_query($conexao,"SELECT idEvento FROM Evento WHERE Nome='" .$Nome ."'") or die(mysqli_error($conexao));
 			
 			//Verifica se foi retornado algum registro
 			while($dados = mysqli_fetch_array($query))
 			{
 			  $eventoCadastrado = true;
 			  break;
-			}
+			}*/
+			
+			$eventoCadastrado = false;
 			
 			if($eventoCadastrado){
 				$resposta = mensagens(15);
