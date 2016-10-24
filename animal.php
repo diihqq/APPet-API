@@ -130,16 +130,7 @@ function InsereAnimal(){
 			//Faz upload da imagem
 			include("uploadDeFotos.php");
 			$caminhoFoto = uploadDeFotos($Foto);
-			
-			//Se não for nulo
-			if ($FotoCarteira != '')
-			{
-				//Faz upload da imagem
-				include("uploadDeFotos.php");
-				$caminhoFotoCarteira = uploadDeFotos($FotoCarteira);
-			}
-			
-			
+					
 			//Recupera idAnimal para incrementar 1
 			$idAnimal = 1;
 			$query = mysqli_query($conexao, "SELECT idAnimal FROM Animal ORDER BY idAnimal DESC LIMIT 1") or die(mysqli_error($conexao));
@@ -350,14 +341,6 @@ function AtualizaAnimal($id){
 					$update .= ", Foto = '" .$caminhoFoto ."'";
 				}
 				
-				if($FotoCarteira != ""){
-					//Faz upload da imagem
-					include("uploadDeFotos.php");
-					$caminhoFotoCarteira = uploadDeFotos($FotoCarteira);
-					
-					$update .= ", FotoCarteira = '" .$caminhoFotoCarteira ."'";
-				}
-				
 				$update .= " WHERE idAnimal=" .$id;
 
 				//Atualiza animal no banco
@@ -545,6 +528,52 @@ function AtualizaQRCode($id){
 				//Atualiza animal no banco
 				$query = mysqli_query($conexao, "UPDATE Animal SET QRCode = '" .$caminho ."' WHERE idAnimal=" .$id) or die(mysqli_error($conexao));
 				$resposta = array("QRCode" => $caminho);
+			}
+		}
+	}
+
+	return $resposta;
+
+}
+
+function AtualizaFotoCarteirinha($id){
+	
+	//Recupera conteudo recebido na request
+	$conteudo = file_get_contents("php://input");
+	$resposta = array();
+
+	//Verifica se o id foi recebido
+	if($id == 0){
+		$resposta = mensagens(9);
+	}
+	else{
+		//Verifica se o conteudo foi recebido
+		if(empty($conteudo)){
+			$resposta = mensagens(2);
+		}
+		else{
+			//Converte o json recebido pra array
+			$dados = json_decode($conteudo,true);
+			
+			//Verifica se as infromações esperadas foram recebidas
+			if(!isset($dados["FotoCarteira"]))
+			{
+				$resposta = mensagens(3);
+			}
+			else
+			{
+				include("conectar.php");
+				include("uploadDeFotos.php");
+				
+				//Evita SQL injection
+				$FotoCarteira = mysqli_real_escape_string($conexao,$dados["FotoCarteira"]);
+				$DataFotoCarteira = mysqli_real_escape_string($conexao,$dados["DataFotoCarteira"]);
+				
+				$caminhoFotoCarteira = uploadDeFotos($FotoCarteira);
+				
+				//Atualiza animal no banco
+				$query = mysqli_query($conexao, "UPDATE Animal SET FotoCarteira = '" .$caminhoFotoCarteira ."', DataFotoCarteira = '" .$DataFotoCarteira . "' WHERE idAnimal=" .$id) or die(mysqli_error($conexao));
+				$resposta = array("FotoCarteira" => $caminhoFotoCarteira);
 			}
 		}
 	}
