@@ -77,6 +77,10 @@ function mensagens($codigo){
 						"Codigo"=>19
 						,"Mensagem"=>"Animal não cadastrado!"
 					)
+					,array(
+						"Codigo"=>20
+						,"Mensagem"=>"Estabelecimento já cadastrado na lista de favoritos!"
+					)
 				 );
 
 	$retorno = array();
