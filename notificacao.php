@@ -21,13 +21,14 @@ function ListaNotificacoesPorUsuario($id){
 		}else{
 			$email = mysqli_real_escape_string($conexao,$dados["Email"]);
 			
-			$query = mysqli_query($conexao,"SELECT N.idNotificacao, N.Mensagem, U.idUsuario, U.Nome, U.Email, U.Telefone, U.Cidade, U.Bairro, N.Notificada, N.Lida FROM Notificacao as N INNER JOIN Usuario as U on N.idUsuario = U.idUsuario WHERE U.Email = '" .$email ."'") or die(mysqli_error($conexao));
+			$query = mysqli_query($conexao,"SELECT N.idNotificacao, N.Mensagem, N.DataNotificacao, U.idUsuario, U.Nome, U.Email, U.Telefone, U.Cidade, U.Bairro, N.Notificada, N.Lida FROM Notificacao as N INNER JOIN Usuario as U on N.idUsuario = U.idUsuario WHERE U.Email = '" .$email ."'") or die(mysqli_error($conexao));
 		
 			//faz um looping e cria um array com os campos da consulta
 			while($dados = mysqli_fetch_array($query))
 			{
 				$resposta[] = array('idNotificacao' => $dados['idNotificacao'],
 									'Mensagem' => $dados['Mensagem'],
+									'DataNotificacao' => $dados['DataNotificacao'],
 									'idUsuario' => $dados['idUsuario'],
 									'Nome' => $dados['Nome'],
 									'Email' => $dados['Email'],
@@ -141,10 +142,10 @@ function InsereNotificacao(){
 			include("conectar.php");
 			
 			//Evita SQL injection
+			$DataNotificacao = mysqli_real_escape_string($conexao,$dados["DataNotificacao"]);
 			$Mensagem = mysqli_real_escape_string($conexao,$dados["Mensagem"]);
 			$idUsuario = mysqli_real_escape_string($conexao,$dados["idUsuario"]);
 			
-
 			//Recupera o próximo ID de Notificacao
 			$idNotificacao = 1;
 			$query = mysqli_query($conexao, "SELECT idNotificacao FROM Notificacao ORDER BY idNotificacao DESC LIMIT 1") or die(mysqli_error($conexao));
@@ -154,8 +155,69 @@ function InsereNotificacao(){
 			$idNotificacao++;
 			
 			//Insere usuário
-			$query = mysqli_query($conexao,"INSERT INTO Notificacao VALUES(" .$idNotificacao .",'" .$Mensagem ."','" .$idUsuario ."')") or die(mysqli_error($conexao));
+			$query = mysqli_query($conexao,"INSERT INTO Notificacao VALUES(" .$idNotificacao .",'" .$Mensagem ."','" .$DataNotificacao ."','" .$idUsuario ."')") or die(mysqli_error($conexao));
 			$resposta = mensagens(7);
+
+		}
+	}
+
+	return $resposta;
+}
+
+function InsereNotificacaoManual(){
+	
+	//Recupera conteudo recebido na request
+	$conteudo = file_get_contents("php://input");
+	$resposta = array();
+
+	//Verifica se o conteudo foi recebido
+	if(empty($conteudo)){
+		$resposta = mensagens(2);
+	}
+	else{
+		//Converte o json recebido pra array
+		$dados = json_decode($conteudo,true);
+		
+		//Verifica se as infromações esperadas foram recebidas
+		if(!isset($dados["Mensagem"]) || !isset($dados["idAnimal"])){
+			$resposta = mensagens(3);
+		}
+		else{
+			include("conectar.php");
+			
+			$idAnimal = mysqli_real_escape_string($conexao,$dados["idAnimal"]); 
+			$Mensagem = mysqli_real_escape_string($conexao,$dados["Mensagem"]);
+			
+			//Recupera idUsuario e nome do animal
+			$idUsuario = 0;
+			$NomeAnimal = "";
+			$query = mysqli_query($conexao, "SELECT U.idUsuario, U.Nome as NomeUsuario, A.Nome as NomeAnimal FROM Animal A INNER JOIN Usuario U on A.idUsuario = U.idUsuario WHERE A.idAnimal = "  .$idAnimal) or die(mysqli_error($conexao));
+			while($dados = mysqli_fetch_array($query)){
+				$idUsuario = $dados["idUsuario"];
+				$NomeUsuario = $dados["NomeUsuario"];
+				$NomeAnimal = $dados["NomeAnimal"];
+			}
+			
+			//Carrega data/hora atual
+			date_default_timezone_set('America/Brasilia');
+			$startDate = time();
+			$DataNotificacao = date('Y/m/d H:i:s', strtotime('-2 hour', $startDate));
+			$DataNotificacaoTexto = date('d/m/Y H:i:s', strtotime('-2 hour', $startDate));	
+			
+			$MensagemFinal = "Mensagem do usuário " .$NomeUsuario . " na data " .$DataNotificacaoTexto . " sobre o pet " .$NomeAnimal . ": " .$Mensagem;
+			
+			//Recupera o próximo ID de Notificacao
+			$idNotificacao = 1;
+			$query = mysqli_query($conexao, "SELECT idNotificacao FROM Notificacao ORDER BY idNotificacao DESC LIMIT 1") or die(mysqli_error($conexao));
+			while($dados = mysqli_fetch_array($query)){
+				$idNotificacao = $dados["idNotificacao"];
+			}
+			$idNotificacao++;
+			
+			//Insere notificação
+			$query = mysqli_query($conexao,"INSERT INTO Notificacao VALUES(" .$idNotificacao .",'" .$MensagemFinal ."','" .$DataNotificacao ."'," .$idUsuario .",0,0)") or die(mysqli_error($conexao));
+			
+			$resposta = mensagens(18);
 
 		}
 	}

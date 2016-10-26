@@ -476,10 +476,16 @@ function EncontrarAnimal($id){
 					$query = mysqli_query($conexao,"INSERT INTO Localizacao VALUES(" .$idLocalizacao .",'" .$Latitude ."','" .$Longitude ."'," .$idDesaparecimento .")") 
 					or die(mysqli_error($conexao));
 					
-					$Mensagem = "Seu pet " .$nome ." foi visto em " .$Local .". As coordenadas são latitude = " .$Latitude ." e longitude = " .$Longitude .".";
+					//Carrega data/hora atual
+					date_default_timezone_set('America/Brasilia');
+					$startDate = time();
+					$DataNotificacao = date('Y/m/d H:i:s', strtotime('-2 hour', $startDate));
+					$DataNotificacaoTexto = date('d/m/Y H:i:s', strtotime('-2 hour', $startDate));
+					
+					$Mensagem = "Seu pet " .$nome ." foi visto na data " . $DataNotificacaoTexto . " em " .$Local .". As coordenadas são latitude = " .$Latitude ." e longitude = " .$Longitude .".";
 					
 					//Insere notificação
-					$query = mysqli_query($conexao,"INSERT INTO Notificacao VALUES(" .$idNotificacao .",'" .$Mensagem ."'," .$idUsuario .",0,0)") 
+					$query = mysqli_query($conexao,"INSERT INTO Notificacao VALUES(" .$idNotificacao .",'" .$Mensagem ."','" .$DataNotificacao ."'," .$idUsuario .",0,0)") 
 					or die(mysqli_error($conexao));
 					
 					$resposta = mensagens(18);
