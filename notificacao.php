@@ -179,7 +179,8 @@ function InsereNotificacaoManual(){
 		$dados = json_decode($conteudo,true);
 		
 		//Verifica se as infromações esperadas foram recebidas
-		if(!isset($dados["Mensagem"]) || !isset($dados["idAnimal"])){
+		if(!isset($dados["Mensagem"]) || !isset($dados["idAnimal"]) || !isset($dados["Email"]))
+		{
 			$resposta = mensagens(3);
 		}
 		else{
@@ -187,15 +188,21 @@ function InsereNotificacaoManual(){
 			
 			$idAnimal = mysqli_real_escape_string($conexao,$dados["idAnimal"]); 
 			$Mensagem = mysqli_real_escape_string($conexao,$dados["Mensagem"]);
+			$Email = mysqli_real_escape_string($conexao,$dados["Email"]); 
 			
 			//Recupera idUsuario e nome do animal
 			$idUsuario = 0;
 			$NomeAnimal = "";
-			$query = mysqli_query($conexao, "SELECT U.idUsuario, U.Nome as NomeUsuario, A.Nome as NomeAnimal FROM Animal A INNER JOIN Usuario U on A.idUsuario = U.idUsuario WHERE A.idAnimal = "  .$idAnimal) or die(mysqli_error($conexao));
+			$query = mysqli_query($conexao, "SELECT idUsuario, Nome FROM Animal WHERE idAnimal = "  .$idAnimal) or die(mysqli_error($conexao));
 			while($dados = mysqli_fetch_array($query)){
 				$idUsuario = $dados["idUsuario"];
-				$NomeUsuario = $dados["NomeUsuario"];
-				$NomeAnimal = $dados["NomeAnimal"];
+				$NomeAnimal = $dados["Nome"];
+			}
+			
+			$NomeUsuario = "";
+			$query = mysqli_query($conexao, "SELECT Nome FROM Usuario WHERE Email = '" .$Email ."'") or die(mysqli_error($conexao));
+			while($dados = mysqli_fetch_array($query)){
+				$NomeUsuario = $dados["Nome"];
 			}
 			
 			//Carrega data/hora atual
