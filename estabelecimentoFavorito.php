@@ -71,7 +71,7 @@ function InsereEstabelecimentoFavorito(){
 		}
 		else{
 			include("conectar.php");
-			$EstabelecimentoCadastrado = false;
+			$EstabelecimentoCadastrado = False;
 			
 			//Evita SQL injection
 			$Nome = mysqli_real_escape_string($conexao,$dados["Nome"]);
@@ -82,15 +82,15 @@ function InsereEstabelecimentoFavorito(){
 			$Endereco = mysqli_real_escape_string($conexao,$dados["Endereco"]);
 			
 			//Consulta estabelecimento favorito no banco
-			$query = mysqli_query($conexao,"SELECT idEstabelecimentoFavorito, Nome, Latitude, Longitude, idUsuario FROM EstabelecimentoFavorito WHERE Nome='" .$Nome ."'") or die(mysqli_error($conexao));
+			$query = mysqli_query($conexao,"SELECT idEstabelecimentoFavorito, Nome, Latitude, Longitude, idUsuario FROM EstabelecimentoFavorito WHERE Nome='" .$Nome ."' AND idUsuario = " .$idUsuario) or die(mysqli_error($conexao));
 			
 			//Verifica se foi retornado algum registro
 			while($dados = mysqli_fetch_array($query))
 			{
-			  $EstabelecimentoCadastrado = true;
+			  $EstabelecimentoCadastrado = True;
 			  break;
 			}
-			
+
 			if($EstabelecimentoCadastrado){
 				$resposta = mensagens(20);
 			}else{
