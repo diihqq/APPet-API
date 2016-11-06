@@ -213,6 +213,7 @@ function InsereNotificacaoManual(){
 			$DataNotificacao = date('Y/m/d H:i:s', strtotime('-2 hour', $startDate));
 			$DataNotificacaoTexto = date('d/m/Y H:i:s', strtotime('-2 hour', $startDate));	
 			
+			$MensagemFinal = "Localizado por " .$NomeUsuario . " na data " .$DataNotificacaoTexto . " o pet " .$NomeAnimal . ". Mensagem: " .$Mensagem . ". Contate: " .$TelefoneUsuario;
 			
 			//Recupera o próximo ID de Notificacao
 			$idNotificacao = 1;
