@@ -200,9 +200,11 @@ function InsereNotificacaoManual(){
 			}
 			
 			$NomeUsuario = "";
-			$query = mysqli_query($conexao, "SELECT Nome FROM Usuario WHERE Email = '" .$Email ."'") or die(mysqli_error($conexao));
+			$TelefoneUsuario = "";
+			$query = mysqli_query($conexao, "SELECT Nome, Telefone FROM Usuario WHERE Email = '" .$Email ."'") or die(mysqli_error($conexao));
 			while($dados = mysqli_fetch_array($query)){
 				$NomeUsuario = $dados["Nome"];
+				$TelefoneUsuario = $dados["Telefone"];
 			}
 			
 			//Carrega data/hora atual
@@ -211,7 +213,6 @@ function InsereNotificacaoManual(){
 			$DataNotificacao = date('Y/m/d H:i:s', strtotime('-2 hour', $startDate));
 			$DataNotificacaoTexto = date('d/m/Y H:i:s', strtotime('-2 hour', $startDate));	
 			
-			$MensagemFinal = "Mensagem do usuário " .$NomeUsuario . " na data " .$DataNotificacaoTexto . " sobre o pet " .$NomeAnimal . ": " .$Mensagem;
 			
 			//Recupera o próximo ID de Notificacao
 			$idNotificacao = 1;
