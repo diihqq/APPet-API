@@ -54,8 +54,7 @@ function AtualizaMedicamento($id){
 			$dados = json_decode($conteudo,true);
 			
 			//Verifica se as infromações esperadas foram recebidas
-			if(!isset($dados["Inicio"]) || !isset($dados["Fim"]) || 
-		   !isset($dados["FrequenciaDiaria"]) || !isset($dados["HorasDeEspera"]))
+			if(!isset($dados["Nome"]))
 			{
 				$resposta = mensagens(3);
 			}
@@ -64,15 +63,40 @@ function AtualizaMedicamento($id){
 				include("conectar.php");
 				
 				//Evita SQL injection
-				$Inicio = mysqli_real_escape_string($conexao,$dados["Inicio"]);
-				$Fim = mysqli_real_escape_string($conexao,$dados["Fim"]);
-				$FrequenciaDiaria = mysqli_real_escape_string($conexao,$dados["FrequenciaDiaria"]);
-				$HorasDeEspera = mysqli_real_escape_string($conexao,$dados["HorasDeEspera"]);
+				$Nome = mysqli_real_escape_string($conexao,$dados["Nome"]);
+				
+				//Campos da Tabela Vacina
+				if(!isset($dados["Observacoes"])){
+					$Observacoes = 'NULL';
+				}else{
+					$Observacoes = mysqli_real_escape_string($conexao,$dados["Observacoes"]);
+				}
+				
+				//Campos da Tabela Medicamento
+				if(!isset($dados["Inicio"])){
+					$Inicio = 'CURDATE()'; //Se o campo Inicio não for passado será pressuposto que o inicio é a data atual
+				}else{
+					$Inicio = mysqli_real_escape_string($conexao,$dados["Inicio"]);
+				}
+				
+				if(!isset($dados["Fim"])){
+					$Fim = 'CURDATE()'; //Se o campo Fim não for passado será pressuposto que o fim é a data atual
+				}else{
+					$Fim = mysqli_real_escape_string($conexao,$dados["Fim"]);
+				}
+								
+				if(!isset($dados["HorasDeEspera"])){
+					$HorasDeEspera = 'NULL';
+				}else{
+					$HorasDeEspera = mysqli_real_escape_string($conexao,$dados["HorasDeEspera"]);
+				}
 				
 				//Atualiza medicamento no banco
 				$query = mysqli_query($conexao, "UPDATE Medicamento SET Inicio = '" .$Inicio ."', Fim = '" .$Fim ."',
-				FrequenciaDiaria = " .$FrequenciaDiaria .", HorasDeEspera = '" .$HorasDeEspera ."'
-				WHERE idEvento=" .$id) or die(mysqli_error($conexao));
+				HorasDeEspera = " .$HorasDeEspera ." WHERE idEvento=" .$id) or die(mysqli_error($conexao));
+				
+				$query2 = mysqli_query($conexao,"UPDATE Evento SET Nome = '". $Nome ."', Observacoes = '" .$Observacoes ."' WHERE idEvento=" .$id) or die(mysqli_error($conexao));
+				
 				$resposta = mensagens(10);
 			}
 		}

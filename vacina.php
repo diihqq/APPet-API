@@ -113,8 +113,7 @@ function AtualizaVacina($id){
 			$dados = json_decode($conteudo,true);
 			
 			//Verifica se as infromações esperadas foram recebidas
-			if(!isset($dados["Aplicada"]) || !isset($dados["DataAplicacao"]) || 
-		   !isset($dados["DataValidade"]) || !isset($dados["FrequenciaAnual"]) || !isset($dados["QtdDoses"]))
+			if(!isset($dados["Nome"]))
 			{
 				$resposta = mensagens(3);
 			}
@@ -123,16 +122,46 @@ function AtualizaVacina($id){
 				include("conectar.php");
 				
 				//Evita SQL injection
-				$Aplicada = mysqli_real_escape_string($conexao,$dados["Aplicada"]);
-				$DataAplicacao = mysqli_real_escape_string($conexao,$dados["DataAplicacao"]);
-				$DataValidade = mysqli_real_escape_string($conexao,$dados["DataValidade"]);
-				$FrequenciaAnual = mysqli_real_escape_string($conexao,$dados["FrequenciaAnual"]);
-				$QtdDoses = mysqli_real_escape_string($conexao,$dados["QtdDoses"]);
+				$Nome = mysqli_real_escape_string($conexao,$dados["Nome"]);
+				
+				//Campos da Tabela Vacina
+				if(!isset($dados["Observacoes"])){
+					$Observacoes = 'NULL';
+				}else{
+					$Observacoes = mysqli_real_escape_string($conexao,$dados["Observacoes"]);
+				}
+				
+				if(!isset($dados["DataAplicacao"])){
+					$DataAplicacao = 'NULL';
+				}else{
+					$DataAplicacao = mysqli_real_escape_string($conexao,$dados["DataAplicacao"]);
+				}
+				
+				if(!isset($dados["DataValidade"])){
+					$DataValidade = 'NULL';
+				}else{
+					$DataValidade = mysqli_real_escape_string($conexao,$dados["DataValidade"]);
+				}
+				
+				if(!isset($dados["QtdDoses"])){
+					$QtdDoses = 'NULL';
+				}else{
+					$QtdDoses = mysqli_real_escape_string($conexao,$dados["QtdDoses"]);
+				}
+				
+				if(!isset($dados["Aplicada"])){
+					$Aplicada = 0; //Se o campo aplicada não for passado será pressuposto que a vacina ainda não foi aplicada
+				}else{
+					$Aplicada = mysqli_real_escape_string($conexao,$dados["Aplicada"]);
+				}
 				
 				//Atualiza vacina no banco
 				$query = mysqli_query($conexao, "UPDATE Vacina SET Aplicada = " .$Aplicada .", DataAplicacao = '" .$DataAplicacao ."',
-				DataValidade = '" .$DataValidade ."', FrequenciaAnual	 = " .$FrequenciaAnual .", QtdDoses = " .$QtdDoses ." 
+				DataValidade = '" .$DataValidade ."', QtdDoses = " .$QtdDoses ." 
 				WHERE idEvento=" .$id) or die(mysqli_error($conexao));
+				
+				$query2 = mysqli_query($conexao,"UPDATE Evento SET Nome = '". $Nome ."', Observacoes = '" .$Observacoes ."' WHERE idEvento=" .$id) or die(mysqli_error($conexao));
+				
 				$resposta = mensagens(10);
 			}
 		}

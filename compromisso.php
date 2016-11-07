@@ -88,8 +88,7 @@ function AtualizaCompromisso($id){
 			$dados = json_decode($conteudo,true);
 			
 			//Verifica se as infromações esperadas foram recebidas
-			if(!isset($dados["NomeLocal"]) || !isset($dados["Latitude"]) || 
-		   !isset($dados["Longitude"]) || !isset($dados["DataHora"]))
+			if(!isset($dados["Nome"]))
 			{
 				$resposta = mensagens(3);
 			}
@@ -98,15 +97,34 @@ function AtualizaCompromisso($id){
 				include("conectar.php");
 				
 				//Evita SQL injection
-				$NomeLocal = mysqli_real_escape_string($conexao,$dados["NomeLocal"]);
-				$Latitude = mysqli_real_escape_string($conexao,$dados["Latitude"]);
-				$Longitude = mysqli_real_escape_string($conexao,$dados["Longitude"]);
-				$DataHora = mysqli_real_escape_string($conexao,$dados["DataHora"]);
+				$Nome = mysqli_real_escape_string($conexao,$dados["Nome"]);
+				
+				//Campos da Tabela Vacina
+				if(!isset($dados["Observacoes"])){
+					$Observacoes = 'NULL';
+				}else{
+					$Observacoes = mysqli_real_escape_string($conexao,$dados["Observacoes"]);
+				}
+				
+				//Campos da Tabela Compromisso
+				if(!isset($dados["NomeLocal"])){
+					$NomeLocal = 'Local'; //Se o campo Local não for passado será pressuposto que o NomeLocal é Local
+				}else{
+					$NomeLocal = mysqli_real_escape_string($conexao,$dados["NomeLocal"]);
+				}
+				
+				if(!isset($dados["DataHora"])){
+					$DataHora = 'NOW()'; //Se o campo DataHora não for passado será pressuposto que o a data hora é o instante atual
+				}else{
+					$DataHora = mysqli_real_escape_string($conexao,$dados["DataHora"]);
+				}
 				
 				//Atualiza compromisso no banco
-				$query = mysqli_query($conexao, "UPDATE Compromisso SET NomeLocal = '" .$NomeLocal ."', Latitude = '" .$Latitude ."',
-				Longitude = '" .$Longitude ."', DataHora = '" .$DataHora ."'
+				$query = mysqli_query($conexao, "UPDATE Compromisso SET NomeLocal = '" .$NomeLocal ."', DataHora = '" .$DataHora ."'
 				WHERE idEvento=" .$id) or die(mysqli_error($conexao));
+				
+				$query2 = mysqli_query($conexao,"UPDATE Evento SET Nome = '". $Nome ."', Observacoes = '" .$Observacoes ."' WHERE idEvento=" .$id) or die(mysqli_error($conexao));
+				
 				$resposta = mensagens(10);
 			}
 		}
