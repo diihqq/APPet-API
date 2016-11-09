@@ -21,7 +21,7 @@ function ListaNotificacoesPorUsuario($id){
 		}else{
 			$email = mysqli_real_escape_string($conexao,$dados["Email"]);
 			
-			$query = mysqli_query($conexao,"SELECT N.idNotificacao, N.Mensagem, N.DataNotificacao, U.idUsuario, U.Nome, U.Email, U.Telefone, U.Cidade, U.Bairro, N.Notificada, N.Lida FROM Notificacao as N INNER JOIN Usuario as U on N.idUsuario = U.idUsuario WHERE U.Email = '" .$email ."'") or die(mysqli_error($conexao));
+			$query = mysqli_query($conexao,"SELECT N.idNotificacao, N.Mensagem, N.DataNotificacao, U.idUsuario, U.Nome, U.Email, U.Telefone, U.Cidade, U.Bairro, N.Notificada, N.Lida FROM Notificacao as N INNER JOIN Usuario as U on N.idUsuario = U.idUsuario WHERE U.Email = '" .$email ."' order by N.DataNotificacao desc") or die(mysqli_error($conexao));
 		
 			//faz um looping e cria um array com os campos da consulta
 			while($dados = mysqli_fetch_array($query))
@@ -213,7 +213,7 @@ function InsereNotificacaoManual(){
 			$DataNotificacao = date('Y/m/d H:i:s', strtotime('-2 hour', $startDate));
 			$DataNotificacaoTexto = date('d/m/Y H:i:s', strtotime('-2 hour', $startDate));	
 			
-			$MensagemFinal = "Localizado por " .$NomeUsuario . " na data " .$DataNotificacaoTexto . " o pet " .$NomeAnimal . ". Mensagem: " .$Mensagem . ". Contate: " .$TelefoneUsuario;
+			$MensagemFinal = "Seu pet " .$NomeAnimal . " foi localizado pelo usuário " .$NomeUsuario . " na data " .$DataNotificacaoTexto . ".\nMensagem: " .$Mensagem . "\nContato: " .$TelefoneUsuario;
 			
 			//Recupera o próximo ID de Notificacao
 			$idNotificacao = 1;
