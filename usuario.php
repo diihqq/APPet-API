@@ -199,8 +199,9 @@ function ExcluiUsuario($id){
 		//Evita SQL injection		
 		$id = mysqli_real_escape_string($conexao,$id);
 		
-		//Consulta usuário no banco
-		$query = mysqli_query($conexao, "DELETE FROM Usuario WHERE idUsuario=" .$id) or die(mysqli_error($conexao));
+		//Exclui usuário no banco
+		$query1 = mysqli_query($conexao, "DELETE FROM Animal WHERE idUsuario=" .$id) or die(mysqli_error($conexao));
+		$query2 = mysqli_query($conexao, "DELETE FROM Usuario WHERE idUsuario=" .$id) or die(mysqli_error($conexao));
 		$resposta = mensagens(11);
 	}
 
