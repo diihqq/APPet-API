@@ -37,7 +37,7 @@ function ListaRacasPorEspecie($id){
 	if($id == 0){
 		$resposta = mensagens(14);
 	}else{
-		$query = mysqli_query($conexao,"SELECT R.idRaca, R.Nome as 'NomeRaca', R.Descricao, R.idEspecie, E.Nome as 'NomeEspecie' FROM Raca as R INNER JOIN Especie as E on R.idEspecie = E.idEspecie WHERE R.idEspecie = " .$id) or die(mysqli_error($conexao));
+		$query = mysqli_query($conexao,"SELECT R.idRaca, R.Nome as 'NomeRaca', R.Descricao, R.idEspecie, E.Nome as 'NomeEspecie' FROM Raca as R INNER JOIN Especie as E on R.idEspecie = E.idEspecie WHERE R.idEspecie = " .$id . " order by R.Nome") or die(mysqli_error($conexao));
 		
 		//faz um looping e cria um array com os campos da consulta
 		while($dados = mysqli_fetch_array($query))
